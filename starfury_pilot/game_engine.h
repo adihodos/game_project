@@ -1,26 +1,24 @@
 #ifndef GAMEENGINE_H__
 #define GAMEENGINE_H__
 
-#include <d2d1.h>
 #include <list>
-#include "misc.h"
+#include <d2d1.h>
+#include <gfx/vector2d.h>
+#include "basetypes.h"
+#include "lazy_unique_instance.h"
 #include "scoped_handle.h"
 #include "scoped_pointer.h"
-#include "vector2d.h"
 
 class ISpaceShip;
 class IProjectile;
 class ICollidable;
-
+class GameResourceCache;
+class ScreenManager;
 class Direct2DRenderer;
 
-class GameEngine {
+class GameEngine : private base::LazyUniqueInstanceLifeTraits<GameEngine> {
 public :
-  GameEngine(HINSTANCE app_instance, int width, int height);
-
-  ~GameEngine();
-
-  bool Initialize();
+  bool Initialize(HINSTANCE app_instance, int width, int height);
 
   void RunMainLoop();
 
@@ -31,6 +29,12 @@ public :
   }
 
 private :
+  friend class base::LazyUniqueInstanceLifeTraits<GameEngine>;
+
+  GameEngine();
+
+  ~GameEngine();
+
   static LRESULT CALLBACK WindowProcedureStub(
     HWND window,
     UINT msg,
@@ -58,6 +62,10 @@ private :
 
   void handle_keypress(UINT virt_code);
 
+  void handle_mouse_move(WPARAM w, LPARAM l);
+
+  void handle_wm_activate(bool activated, bool minimized);
+
   static Direct2DRenderer*                        r_pointer_;
   static const wchar_t* const                     K_BKFileName;
 
@@ -76,6 +84,7 @@ private :
   scoped_pointer<ID2D1BitmapBrush, D2DInterface>  r_bkbrush_;
   bool                                            pause_flag_;
   float                                           last_time_;
+  scoped_pointer<ScreenManager>                   scmgr_;
 
   NO_CPY_CONSTRUCTORS(GameEngine);
 };

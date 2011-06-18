@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include <cstdlib>
-#include "misc.h"
+#include "basetypes.h"
 
 template<typename T>
 struct default_pointer {
@@ -71,6 +71,10 @@ public :
 
   T* get() const {
     return ptr_;
+  }
+
+  T** get_owned_ptr() {
+    return &ptr_;
   }
 
   T* operator->() {

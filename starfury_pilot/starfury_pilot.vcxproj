@@ -39,6 +39,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\opt\libs\gfx_lib\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\opt\libs\gfx_lib\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -54,7 +56,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>winmm.lib;d2d1.lib;WindowsCodecs.lib;dwrite.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;d2d1.lib;WindowsCodecs.lib;dwrite.lib;ole32.lib;gfx_lib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,47 +77,61 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="circle.h" />
+    <ClInclude Include="atexit_manager.h" />
+    <ClInclude Include="basetypes.h" />
     <ClInclude Include="d2drenderer.h" />
+    <ClInclude Include="fixed_stack.h" />
     <ClInclude Include="game_engine.h" />
+    <ClInclude Include="game_resourcecache.h" />
+    <ClInclude Include="hashfunc.h" />
     <ClInclude Include="helpers.h" />
     <ClInclude Include="icollidable.h" />
     <ClInclude Include="idrawable.h" />
+    <ClInclude Include="gamefont.h" />
+    <ClInclude Include="igamescreen.h" />
+    <ClInclude Include="ikeyboardeventreceiver.h" />
+    <ClInclude Include="imouseeventreceiver.h" />
     <ClInclude Include="iprojectile.h" />
     <ClInclude Include="ispaceship.h" />
+    <ClInclude Include="iuicomponent.h" />
+    <ClInclude Include="lazy_unique_instance.h" />
+    <ClInclude Include="mainscreen.h" />
     <ClInclude Include="meteor.h" />
-    <ClInclude Include="misc.h" />
     <ClInclude Include="precompiled.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="resource_manager.h" />
+    <ClInclude Include="resultwrapper.h" />
+    <ClInclude Include="sa32_plasmabolt.h" />
     <ClInclude Include="sa32_rocket.h" />
     <ClInclude Include="sa32_thunderbolt.h" />
     <ClInclude Include="scoped_handle.h" />
     <ClInclude Include="scoped_pointer.h" />
-    <ClInclude Include="vector2d.h" />
+    <ClInclude Include="screen_manager.h" />
+    <ClInclude Include="uipushbutton.h" />
+    <ClInclude Include="ui_factory.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="atexit_manager.cc" />
     <ClCompile Include="d2drender.cc" />
     <ClCompile Include="game_engine.cc" />
+    <ClCompile Include="game_resourcecache.cc" />
+    <ClCompile Include="hashfunc.cc" />
     <ClCompile Include="helpers.cc" />
     <ClCompile Include="icollidable.cc" />
+    <ClCompile Include="iuicomponent.cc" />
     <ClCompile Include="main.cc" />
+    <ClCompile Include="mainscreen.cc" />
     <ClCompile Include="meteor.cc" />
     <ClCompile Include="precompiled.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="sa32_plasmabolt.cc" />
     <ClCompile Include="sa32_rocket.cc" />
     <ClCompile Include="sa32_thunderbolt.cc" />
-    <ClCompile Include="vector2d.cc" />
+    <ClCompile Include="screen_manager.cc" />
+    <ClCompile Include="uipushbutton.cc" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="starfury_pilot.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\..\Pictures\bkg_mask.bmp" />
-    <None Include="..\..\..\..\..\Pictures\carina2.bmp" />
-    <None Include="..\..\..\..\..\Pictures\sa_32.bmp" />
-    <None Include="..\..\..\..\..\Pictures\sa_32_mask.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

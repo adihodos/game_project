@@ -1,11 +1,10 @@
 #pragma once
 
 #include <d2d1.h>
-#include "circle.h"
+#include <gfx/circle.h>
+#include "basetypes.h"
 #include "iprojectile.h"
-#include "misc.h"
 #include "scoped_pointer.h"
-#include "vector2d.h"
 
 class Direct2DRenderer;
 
@@ -52,6 +51,7 @@ private :
   gfx::vector2D                               velocity_;
   scoped_pointer<ID2D1Bitmap, D2DInterface>   bitmap_;
   float                                       rotation_;
+  D2D1_SIZE_F                                 geometry_;
 #if defined(_DEBUG)
   scoped_pointer<ID2D1SolidColorBrush, D2DInterface> dbgbrush_;
 #endif

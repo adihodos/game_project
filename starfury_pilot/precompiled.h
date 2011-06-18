@@ -18,12 +18,18 @@
 #include <string>
 #include <vector>
 
+#include <gfx/circle.h>
+#include <gfx/vector2d.h>
+#include <gfx/matrix3x3.h>
+#include <gfx/misc.h>
+
 #if defined(NTDDI_VERSION)
 #undef NTDDI_VERSION
 #endif
 
 #define NTDDI_VERSION NTDDI_WIN7
 #include <Windows.h>
+#include <WindowsX.h>
 #include <tchar.h>
 #include <d2d1.h>
 #include <d2d1helper.h>

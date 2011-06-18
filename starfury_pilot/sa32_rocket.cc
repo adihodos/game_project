@@ -2,10 +2,9 @@
 #include "d2drenderer.h"
 #include "helpers.h"
 #include "sa32_rocket.h"
-#include "helpers.h"
 
 const wchar_t* const SA32_Rocket::K_ResourceFileName =
-    L"sa32_plasmabolt.png";
+    L"sa32_rocket.png";
 
 const float SA32_Rocket::K_PlasmaBoltRadius = 15.0f;
 
@@ -23,7 +22,6 @@ SA32_Rocket::SA32_Rocket(
     hp_(SA32_Rocket::K_HitPoints),
     damage_(SA32_Rocket::K_Damage),
     texture_(),
-    plasmabrush_(),
     angle_(angle)
 {
   std::wstring filepath(utility::GetApplicationResourceDirectory());
@@ -39,15 +37,16 @@ SA32_Rocket::SA32_Rocket(
                             &rocketbmp);
   assert(SUCCEEDED(ret_code));
   texture_.reset(rocketbmp);
+
+  centerpt_.x = texture_->GetSize().width / 2;
+  centerpt_.y = texture_->GetSize().height / 2;
   
-  ID2D1BitmapBrush* tmpbrush;
-  ret_code = r_target->CreateBitmapBrush(texture_.get(), &tmpbrush);
-  assert(SUCCEEDED(ret_code));
-  plasmabrush_.reset(tmpbrush);
+  geometry_.height = texture_->GetSize().height;
+  geometry_.width = texture_->GetSize().width;
 }
 
 void SA32_Rocket::UpdatePosition(float delta_time) {
-  pos_ += velocity_ * delta_time;
+  pos_ += (velocity_ * delta_time);
   bounding_circle_.center_ = pos_;
 }
 
@@ -55,17 +54,14 @@ void SA32_Rocket::Draw(
   Direct2DRenderer* r_render
   )
 {
-  D2D1_POINT_2F top_left = { 
-    pos_.x_ - texture_->GetSize().width / 2,
-    pos_.y_ - texture_->GetSize().height / 2
-  };
+  D2D1::Matrix3x2F mtx_rot(D2D1::Matrix3x2F::Rotation(angle_, centerpt_));
+  D2D1::Matrix3x2F mtx_trans(D2D1::Matrix3x2F::Translation(
+    pos_.x_ - centerpt_.x, pos_.y_ - centerpt_.y));
 
-  D2D1_POINT_2F bottom_right = {
-    pos_.x_ + texture_->GetSize().width / 2,
-    pos_.y_ + texture_->GetSize().height / 2
-  };
+  r_render->GetRendererTarget()->SetTransform(mtx_rot * mtx_trans);
 
-  r_render->GetRendererTarget()->DrawBitmap(
-    texture_.get(),
-    D2D1::RectF(top_left.x, top_left.y, bottom_right.x, bottom_right.y));
+  r_render->GetRendererTarget()->DrawBitmap(texture_.get(),
+    D2D1::RectF(0.0f, 0.0f, geometry_.width, geometry_.height));
+
+  r_render->GetRendererTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
 }

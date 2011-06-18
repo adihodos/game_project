@@ -2,7 +2,7 @@
 
 #include <d2d1.h>
 #include <wincodec.h>
-#include "misc.h"
+#include "basetypes.h"
 #include "scoped_pointer.h"
 
 class Direct2DRenderer {
@@ -39,7 +39,6 @@ private :
   int                                               r_height_;
   scoped_pointer<ID2D1Factory, D2DInterface>        r_factory_;
   scoped_pointer<ID2D1RenderTarget, D2DInterface>   r_target_;
-  //scoped_pointer<ID2D1BitmapBrush, D2DInterface>    r_background_;
   scoped_pointer<IWICImagingFactory, D2DInterface>  r_imgfactory_;
   NO_CPY_CONSTRUCTORS(Direct2DRenderer);
 };

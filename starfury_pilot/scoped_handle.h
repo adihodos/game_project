@@ -3,7 +3,7 @@
 
 #include <ObjBase.h>
 #include <Windows.h>
-#include "misc.h"
+#include "basetypes.h"
 
 template<typename handle_traits>
 class scoped_handle {

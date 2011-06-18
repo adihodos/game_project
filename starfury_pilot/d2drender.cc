@@ -33,14 +33,14 @@ bool Direct2DRenderer::CreateDeviceIndependentResources() {
 
   r_factory_.reset(pfactory);
 
-  IWICImagingFactory* factory = nullptr;
+  /*IWICImagingFactory* factory = nullptr;
   hr = ::CoCreateInstance(
-    CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
-    IID_IWICImagingFactory, reinterpret_cast<void**>(&factory));
+  CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
+  IID_IWICImagingFactory, reinterpret_cast<void**>(&factory));
   if (!SUCCEEDED(hr))
-    return false;
+  return false;
 
-  r_imgfactory_.reset(factory);
+  r_imgfactory_.reset(factory);*/
   return true;
 }
 

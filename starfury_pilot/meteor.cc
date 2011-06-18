@@ -1,8 +1,8 @@
 #include "precompiled.h"
+#include "basetypes.h"
 #include "d2drenderer.h"
 #include "helpers.h"
 #include "meteor.h"
-#include "misc.h"
 
 const wchar_t* const SpaceMeteorite::K_BitmapFileName = 
   L"game_meteor.png";
@@ -16,9 +16,10 @@ SpaceMeteorite::SpaceMeteorite(
   : IProjectile(),
     bounding_circle_(pos, 0.0f),
     pos_(pos),
-    velocity_(gfx::vector2D::Null_Vector),
+    velocity_(gfx::vector2D::K_NullVector),
     bitmap_(),
-    rotation_(rotation)
+    rotation_(rotation),
+    geometry_()
 {
   ID2D1Bitmap* tmpbmp;
   HRESULT ret_code = utility::LoadBitmapFromFile(
@@ -30,10 +31,11 @@ SpaceMeteorite::SpaceMeteorite(
 
   assert(SUCCEEDED(ret_code));
   bitmap_.reset(tmpbmp);
-  float w = bitmap_->GetSize().width;
-  float h = bitmap_->GetSize().height;
+  geometry_.width = bitmap_->GetSize().width;
+  geometry_.height = bitmap_->GetSize().height;
 
-  bounding_circle_.radius_ = w > h ? h / 2 : w / 2;
+  bounding_circle_.radius_ = geometry_.height > geometry_.width ? 
+    geometry_.height / 2 : geometry_.width / 2;
 
 #if defined(_DEBUG)
   ID2D1SolidColorBrush* tmpbrush;
@@ -44,34 +46,32 @@ SpaceMeteorite::SpaceMeteorite(
 }
 
 void SpaceMeteorite::UpdatePosition(float delta_tm) {
+  //
+  // meteorites don't move for now
   assert(false);
 }
 
 void SpaceMeteorite::Draw(Direct2DRenderer* r_renderer) {
-  r_renderer->GetRendererTarget()->SetTransform(
-    D2D1::Matrix3x2F::Rotation(rotation_, D2D1::Point2F(pos_.x_, pos_.y_)));
+  const float K_MeteorAngularVelocity = 2.0f;
 
-  float w = bitmap_->GetSize().width;
-  float h = bitmap_->GetSize().height;
+  if (std::fabs(rotation_) >= 360.0f) {
+    rotation_ = 0.0f;
+  } else {
+    rotation_ += K_MeteorAngularVelocity;
+  }
 
-  D2D1_RECT_F dst_rect = {
-    pos_.x_ - w / 2,
-    pos_.y_ - h / 2,
-    pos_.x_ + w / 2,
-    pos_.y_ + h / 2
-  };
+  D2D1_MATRIX_3X2_F mtx_movetoorigin = D2D1::Matrix3x2F::Translation(
+    -geometry_.width / 2, -geometry_.height / 2);
+  D2D1_MATRIX_3X2_F mtx_rotate = D2D1::Matrix3x2F::Rotation(rotation_);
+  D2D1_MATRIX_3X2_F mtx_transtoworld = D2D1::Matrix3x2F::Translation(
+    pos_.x_, pos_.y_);
 
+  r_renderer->GetRendererTarget()->SetTransform(mtx_movetoorigin * mtx_rotate *
+    mtx_transtoworld);
+
+  D2D1_RECT_F dst_rect = { 0.0f, 0.0f, geometry_.width, geometry_.height };
+  
   r_renderer->GetRendererTarget()->DrawBitmap(bitmap_.get(), dst_rect);
   r_renderer->GetRendererTarget()->SetTransform(
     D2D1::Matrix3x2F::Identity());
-
-#if defined(_DEBUG)
-
-  r_renderer->GetRendererTarget()->FillEllipse(
-    D2D1::Ellipse(D2D1::Point2F(pos_.x_, pos_.y_), 
-                  bounding_circle_.radius_,
-                  bounding_circle_.radius_),
-                  dbgbrush_.get());
-
-#endif
 }

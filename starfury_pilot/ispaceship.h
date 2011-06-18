@@ -20,7 +20,9 @@ public :
 
   virtual void FireRockets(GameEngine* world) = 0;
 
-  virtual void FireLasers(GameEngine* world) = 0;
+  virtual void FirePlasmaGun(GameEngine* world) = 0;
+
+  virtual void MoveX(float amount = 0.0f) = 0;
 
   virtual void BlowUp() = 0;
 };

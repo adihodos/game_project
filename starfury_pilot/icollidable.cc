@@ -1,7 +1,5 @@
 #include "precompiled.h"
-#include "circle.h"
 #include "icollidable.h"
-#include "vector2d.h"
 
 bool ICollidable::CollidesWith(
   const ICollidable& other, 

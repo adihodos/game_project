@@ -235,3 +235,39 @@ utility::GetApplicationResourceDirectory() {
   dirpath.append(L"resources\\");
   return dirpath;
 }
+
+bool utility::GetScreenSize(SIZE* dim) {
+  assert(dim != nullptr);
+
+  DEVMODEW dinfo;
+  if (!EnumDisplaySettingsW(nullptr, ENUM_CURRENT_SETTINGS, &dinfo))
+    return false;
+
+  dim->cx = dinfo.dmPelsWidth;
+  dim->cy = dinfo.dmPelsHeight;
+  return true;
+}
+
+void 
+utility::shrink_rect( 
+  float amount, 
+  D2D1_RECT_F* rrect 
+  )
+{
+  rrect->left += amount / 2.0f;
+  rrect->top += amount / 2.0f;
+  rrect->right -= amount / 2.0f;
+  rrect->bottom -= amount / 2.0f;
+}
+
+void
+utility::shrink_rounded_rect( 
+  float amount, 
+  D2D1_ROUNDED_RECT* rrect
+  )
+{
+  rrect->rect.left += amount / 2.0f;
+  rrect->rect.top += amount / 2.0f;
+  rrect->rect.right -= amount / 2.0f;
+  rrect->rect.bottom -= amount / 2.0f;
+}

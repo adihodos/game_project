@@ -56,6 +56,42 @@ GetApplicationBaseDirectory(
 std::wstring
 GetApplicationResourceDirectory();
 
+bool
+GetScreenSize(
+  SIZE* dim
+  );
+
+inline 
+bool point_in_rect(
+  float ptx, 
+  float pty, 
+  const D2D1_RECT_F& rc
+  ) 
+{
+  return ptx >= rc.left && ptx <= rc.right && pty >= rc.top && pty <= rc.bottom;
+}
+
+void 
+shrink_rounded_rect(
+  float amount, 
+  D2D1_ROUNDED_RECT* 
+  rrect
+  );
+
+void
+shrink_rect(
+  float amount, 
+  D2D1_RECT_F* rrect
+  );
+
+template<typename T>
+struct COMObject_Deleter {
+  void operator()(T* ptr) {
+    if (ptr)
+      ptr->Release();
+  }
+};
+
 }
 
 #if defined(_DEBUG)

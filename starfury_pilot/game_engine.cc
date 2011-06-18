@@ -1,14 +1,17 @@
 #include "precompiled.h"
-#include "circle.h"
 #include "d2drenderer.h"
 #include "game_engine.h"
+#include "game_resourcecache.h"
+#include "helpers.h"
 #include "icollidable.h"
+#include "igamescreen.h"
 #include "ispaceship.h"
 #include "iprojectile.h"
+#include "lazy_unique_instance.h"
 #include "meteor.h"
 #include "resource.h"
 #include "sa32_thunderbolt.h"
-#include "vector2d.h"
+#include "screen_manager.h"
 
 namespace {
 
@@ -20,29 +23,33 @@ Direct2DRenderer* GameEngine::r_pointer_;
 
 const wchar_t* const GameEngine::K_BKFileName = L"carina_2_nebulae.jpg";
 
-GameEngine::GameEngine(
-  HINSTANCE app_instance,
-  int width,
-  int height
-  )
-  : app_instance_(app_instance),
+GameEngine::GameEngine()
+  : app_instance_(),
     client_window_(nullptr),
-    client_width_(width),
-    client_height_(height),
-    client_centre_(width / 2, height / 2),
+    client_width_(),
+    client_height_(),
+    client_centre_(),
     player_ship_(),
     fired_projectiles_(),
     meteorlist_(),
     r2d2_render_(),
     r_bkbrush_(),
     pause_flag_(false),
-    last_time_(timeGetTime()) {}
+    last_time_(timeGetTime()),
+    scmgr_() {}
 
 GameEngine::~GameEngine() {}
 
 bool
-GameEngine::Initialize() {
+GameEngine::Initialize(HINSTANCE inst, int width, int height) {
+  assert(app_instance_ == nullptr);
   assert(client_window_ == nullptr);
+
+  app_instance_ = inst;
+  client_width_ = width;
+  client_height_ = height;
+  client_centre_.x_ = width / 2;
+  client_centre_.y_ = height / 2;
 
   WNDCLASSEXW classdata;
   classdata.cbSize = sizeof(WNDCLASSEXW);
@@ -57,20 +64,18 @@ GameEngine::Initialize() {
   classdata.lpszMenuName = nullptr;
   classdata.lpszClassName = K_WindowClassName;
 
+  RECT windowrect;
+  windowrect.left = windowrect.top = 0;
+  windowrect.right = client_width_;
+  windowrect.bottom = client_height_;
+  ::AdjustWindowRectEx(&windowrect, WS_POPUP, false, WS_EX_APPWINDOW);
+
   if (!::RegisterClassExW(&classdata))
     return false;
 
   client_window_ = ::CreateWindowExW(
-    0L,
-    K_WindowClassName,
-    L"Asteroid blaster!!",
-    WS_OVERLAPPED | WS_SYSMENU,
-    0, 0,
-    client_width_ + 6,
-    client_height_ + 52,
-    nullptr,
-    nullptr, 
-    app_instance_,
+    WS_EX_APPWINDOW, K_WindowClassName, L"Asteroid blaster!!", WS_POPUP,
+    0, 0, windowrect.right, windowrect.bottom, nullptr, nullptr, app_instance_,
     this);
 
   if (!client_window_)
@@ -81,47 +86,58 @@ GameEngine::Initialize() {
   if (!r2d2_render_->Initialize())
     return false;
 
+  //
+  // Initialize resource cache
+  base::LazyUniqueInstance<GameResourceCache>::Get()->Initialize(
+    static_cast<ID2D1HwndRenderTarget*>(r2d2_render_->GetRendererTarget()));
+
   r_pointer_ = r2d2_render_.get();
 
-  //
-  // Load the bitmap and create the brush
-  ID2D1Bitmap* bitmap = nullptr;
-  std::wstring filepath(utility::GetApplicationResourceDirectory());
-  filepath.append(GameEngine::K_BKFileName);
-
-  HRESULT ret_code = utility::LoadBitmapFromFile(
-    r2d2_render_->GetRendererTarget(),
-    r2d2_render_->GetImagingFactory(),
-    filepath.c_str(),
-    0,
-    0,
-    &bitmap);
-
-  if (FAILED(ret_code))
+  scmgr_.reset(new ScreenManager());
+  if (!scmgr_->Initialize())
     return false;
 
-  ID2D1BitmapBrush* tmpbrush = nullptr;
-  ret_code = r2d2_render_->GetRendererTarget()->CreateBitmapBrush(bitmap, &tmpbrush);
-  if (FAILED(ret_code))
-    return false;
-  r_bkbrush_.reset(tmpbrush);
+  scmgr_->SetActiveScreen(ScreenManager::SM_MainScreen);
 
-  player_ship_.reset(new SA32_Thunderbolt(
-    r2d2_render_->GetRendererTarget(),
-    r2d2_render_->GetImagingFactory(),
-    client_centre_));
+  ////
+  //// Load the bitmap and create the brush
+  //ID2D1Bitmap* bitmap = nullptr;
+  //std::wstring filepath(utility::GetApplicationResourceDirectory());
+  //filepath.append(GameEngine::K_BKFileName);
 
-  meteorlist_.push_back(new SpaceMeteorite(
-    r2d2_render_->GetRendererTarget(),
-    r2d2_render_->GetImagingFactory(),
-    gfx::vector2D(client_centre_.x_ + 250, client_centre_.y_ + 250),
-    40));
+  //HRESULT ret_code = utility::LoadBitmapFromFile(
+  //  r2d2_render_->GetRendererTarget(),
+  //  r2d2_render_->GetImagingFactory(),
+  //  filepath.c_str(),
+  //  0,
+  //  0,
+  //  &bitmap);
 
-  meteorlist_.push_back(new SpaceMeteorite(
-    r2d2_render_->GetRendererTarget(),
-    r2d2_render_->GetImagingFactory(),
-    gfx::vector2D(client_centre_.x_ - 250, client_centre_.y_ - 250),
-    90));
+  //if (FAILED(ret_code))
+  //  return false;
+
+  //ID2D1BitmapBrush* tmpbrush = nullptr;
+  //ret_code = r2d2_render_->GetRendererTarget()->CreateBitmapBrush(bitmap, &tmpbrush);
+  //if (FAILED(ret_code))
+  //  return false;
+  //r_bkbrush_.reset(tmpbrush);
+
+  //player_ship_.reset(new SA32_Thunderbolt(
+  //  r2d2_render_->GetRendererTarget(),
+  //  r2d2_render_->GetImagingFactory(),
+  //  client_centre_));
+
+  //meteorlist_.push_back(new SpaceMeteorite(
+  //  r2d2_render_->GetRendererTarget(),
+  //  r2d2_render_->GetImagingFactory(),
+  //  gfx::vector2D(client_centre_.x_ + 250, client_centre_.y_ + 250),
+  //  40));
+
+  //meteorlist_.push_back(new SpaceMeteorite(
+  //  r2d2_render_->GetRendererTarget(),
+  //  r2d2_render_->GetImagingFactory(),
+  //  gfx::vector2D(client_centre_.x_ - 250, client_centre_.y_ - 250),
+  //  90));
 
   ::ShowWindow(client_window_, SW_NORMAL);
   ::UpdateWindow(client_window_);
@@ -197,6 +213,32 @@ GameEngine::Engine_WindowProc(
     return 0L;
     break;
 
+  case WM_LBUTTONDOWN : {
+    SetCapture(client_window_);
+    MouseEventArgs args(MouseEventArgs::FromLParamWParam(w_param, l_param));
+    scmgr_->LeftButtonDown(&args);
+                        }
+                        break;
+
+  case WM_LBUTTONUP : {
+    ReleaseCapture();
+    MouseEventArgs args(MouseEventArgs::FromLParamWParam(w_param, l_param));
+    scmgr_->LeftButtonUp(&args);
+  }
+                      return 0L;
+  break;
+
+  case WM_ACTIVATE :
+    handle_wm_activate(
+      (LOWORD(w_param) == WA_ACTIVE || LOWORD(w_param) == WA_CLICKACTIVE),
+      HIWORD(w_param) != 0);
+    return 0L;
+    break;
+
+  case WM_MOUSEMOVE :
+    handle_mouse_move(w_param, l_param);
+    break;
+
   default :
     return ::DefWindowProcW(client_window_, msg_code, w_param, l_param);
   }  
@@ -206,23 +248,44 @@ void GameEngine::handle_wm_close() {
   DestroyWindow(client_window_);
 }
 
-void GameEngine::handle_keypress(UINT virt_code) {
-  switch (virt_code) {
-  case VK_LEFT :
-    player_ship_->Rotate(-3.0f);
-    break;
-
-  case VK_RIGHT :
-    player_ship_->Rotate(3.0f);
-    break;
-
-  case VK_SPACE :
-    player_ship_->FireRockets(this);
-    break;
-
-  default :
-    break;
+void GameEngine::handle_wm_activate(bool activated, bool minimized) {
+  //OUT_DBG_MSG(L"Window is %s, minimized %s", activated ? L"activated" : L"deactivated", minimized ? L"true" : L"false");
+  /*if (activated && !minimized) {
+    ::SetCapture(client_window_);
+    return;
   }
+
+  ReleaseCapture();*/
+}
+
+void GameEngine::handle_mouse_move(WPARAM w, LPARAM l) {
+  MouseEventArgs args(MouseEventArgs::FromLParamWParam(w, l));
+  scmgr_->MouseMoved(&args);
+}
+
+void GameEngine::handle_keypress(UINT virt_code) {
+  //BYTE keystate[256];
+  //if (!GetKeyboardState(keystate))
+  //  return;
+
+  ///*float rotation = 0.0f;
+  //if (keystate[VK_LEFT] & (1 << 7))
+  //  rotation = -3.0f;
+  //else if (keystate[VK_RIGHT] & (1 << 7))
+  //  rotation = 3.0f;
+  //else
+  //  rotation = 0.0f;*/
+
+  //if (keystate[VK_LEFT] & (1 << 7))
+  //  player_ship_->MoveX(-1.0f);
+  //else if (keystate[VK_RIGHT] & (1 << 7))
+  //  player_ship_->MoveX(1.0f);
+
+  //if (keystate[VK_SPACE] & (1 << 7))
+  //    player_ship_->FireRockets(this);
+
+  //if (keystate[VK_CONTROL] & (1 << 7))
+  //    player_ship_->FirePlasmaGun(this);
 }
 
 void GameEngine::render_objects() {
@@ -231,37 +294,51 @@ void GameEngine::render_objects() {
 
   //
   // Update projectile positions and do collision checks first
-  UpdateProjectilePositions(delta_time);
+  //UpdateProjectilePositions(delta_time);
 
   r2d2_render_->BeginRenderContent();
 
-  DrawBackground();  
+  IGameScreen* active_screen(scmgr_->GetActiveScreen());
+  if (active_screen)
+    active_screen->Draw(r_pointer_);
 
-  //
-  // render projectiles
-  std::for_each(
-    fired_projectiles_.begin(),
-    fired_projectiles_.end(),
-    [this](IProjectile* projectile) -> void {
-      projectile->Draw(r2d2_render_.get());
-  });
+  /*r2d2_render_->GetRendererTarget()->FillRectangle(
+    D2D1::RectF(0, 0, client_width_, client_height_),
+    base::LazyUniqueInstance<GameResourceCache>::Get()->GetSolidColorBrushHandle(D2D1::ColorF::DeepSkyBlue)
+    );*/
 
-  //
-  // render meteorites
-  std::for_each(
-    meteorlist_.begin(),
-    meteorlist_.end(),
-    [this](IProjectile* asteroid) -> void {
-      asteroid->Draw(r2d2_render_.get());
-  });
+  //DrawBackground();  
 
-  //
-  // Render player's ship
-  player_ship_->Draw(r2d2_render_.get());
+  ////
+  //// render projectiles
+  //std::for_each(
+  //  fired_projectiles_.begin(),
+  //  fired_projectiles_.end(),
+  //  [this](IProjectile* projectile) -> void {
+  //    projectile->Draw(r2d2_render_.get());
+  //});
+
+  ////
+  //// render meteorites
+  //std::for_each(
+  //  meteorlist_.begin(),
+  //  meteorlist_.end(),
+  //  [this](IProjectile* asteroid) -> void {
+  //    asteroid->Draw(r2d2_render_.get());
+  //});
+
+  ////
+  //// Render player's ship
+  //player_ship_->Draw(r2d2_render_.get());
+
+  //IGameScreen* activescreen = scmgr_->GetActiveScreen();
+  //if (activescreen)
+  //  activescreen->Draw(r2d2_render_.get());
+  //else
+  //  // render scene
 
   r2d2_render_->EndRenderingContent();
   last_time_ = current_time;
-  ::Sleep(20);
 }
 
 void GameEngine::UpdateProjectilePositions(float delta) {

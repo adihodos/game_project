@@ -1,12 +1,12 @@
 #pragma once
 
 #include <d2d1.h>
+#include <gfx/circle.h>
+#include <gfx/vector2d.h>
+#include "basetypes.h"
 #include "icollidable.h"
 #include "iprojectile.h"
-#include "circle.h"
-#include "misc.h"
 #include "scoped_pointer.h"
-#include "vector2d.h"
 
 class Direct2DRenderer;
 
@@ -56,8 +56,9 @@ private :
   int                                                       hp_;
   int                                                       damage_;
   scoped_pointer<ID2D1Bitmap, D2DInterface>                 texture_;
-  scoped_pointer<ID2D1BitmapBrush, D2DInterface>            plasmabrush_;
   const float                                               angle_;
+  D2D1_POINT_2F                                             centerpt_;
+  D2D1_SIZE_F                                               geometry_;
 
   NO_CPY_CONSTRUCTORS(SA32_Rocket);
 };

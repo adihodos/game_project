@@ -21,16 +21,7 @@
     <ClInclude Include="scoped_handle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="misc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scoped_pointer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="vector2d.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="circle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -66,7 +57,55 @@
     <ClInclude Include="meteor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource_manager.h">
+    <ClInclude Include="sa32_plasmabolt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resultwrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="basetypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ikeyboardeventreceiver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imouseeventreceiver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="igamescreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fixed_stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mainscreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="screen_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_resourcecache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lazy_unique_instance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="atexit_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hashfunc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iuicomponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uipushbutton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_factory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gamefont.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -81,9 +120,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sa32_thunderbolt.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="vector2d.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sa32_rocket.cc">
@@ -101,24 +137,34 @@
     <ClCompile Include="meteor.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sa32_plasmabolt.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="screen_manager.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mainscreen.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_resourcecache.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="atexit_manager.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hashfunc.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uipushbutton.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="iuicomponent.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="starfury_pilot.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\..\Pictures\carina2.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\..\..\..\Pictures\sa_32.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\..\..\..\Pictures\sa_32_mask.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\..\..\..\Pictures\bkg_mask.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
