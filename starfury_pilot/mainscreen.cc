@@ -6,6 +6,10 @@
 #include "mainscreen.h"
 #include "uipushbutton.h"
 
+namespace {
+  const wchar_t* const K_BKFileName = L"main_menu_1280x1024.jpg";
+}
+
 MainGameScreen::MainGameScreen( 
   ScreenManager* smgr, float x, float y, float bx, float by, 
   IGameScreen* parent /* = nullptr */, bool active /* = true */ 
@@ -61,32 +65,42 @@ void MainGameScreen::Draw(Direct2DRenderer* renderer) {
     static_cast<ID2D1HwndRenderTarget*>(renderer->GetRendererTarget());
   rtarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
-  ID2D1SolidColorBrush* bluebrush = resprovider_->GetSolidColorBrushHandle(
-      D2D1::ColorF(D2D1::ColorF::DeepSkyBlue));
+  //ID2D1SolidColorBrush* bluebrush = resprovider_->GetSolidColorBrushHandle(
+  //    D2D1::ColorF(D2D1::ColorF::DeepSkyBlue));
 
-  ID2D1SolidColorBrush* blkbrush = resprovider_->GetSolidColorBrushHandle(
-    D2D1::ColorF(D2D1::ColorF::Black));
+  //ID2D1SolidColorBrush* blkbrush = resprovider_->GetSolidColorBrushHandle(
+  //  D2D1::ColorF(D2D1::ColorF::Black));
 
-  D2D1_RECT_F baserect(
-    D2D1::RectF(topleft_.x_, topleft_.y_, bottomright_.x_, bottomright_.y_));
+  //D2D1_RECT_F baserect(
+  //  D2D1::RectF(topleft_.x_, topleft_.y_, bottomright_.x_, bottomright_.y_));
 
-  rtarget->FillRectangle(baserect, blkbrush);
+  //rtarget->FillRectangle(baserect, blkbrush);
 
-  gfx::matrix3X3 mtx_scale(gfx::matrix3X3::scale(0.95f, 0.95f));
+  //gfx::matrix3X3 mtx_scale(gfx::matrix3X3::scale(0.95f, 0.95f));
 
-  gfx::vector2D vtopleft = mtx_scale * topleft_;
-  gfx::vector2D vbotright = mtx_scale * bottomright_;
+  //gfx::vector2D vtopleft = mtx_scale * topleft_;
+  //gfx::vector2D vbotright = mtx_scale * bottomright_;
 
-  baserect.left = vtopleft.x_;
-  baserect.top = vtopleft.y_;
-  baserect.right = vbotright.x_;
-  baserect.bottom = vbotright.y_;
+  //baserect.left = vtopleft.x_;
+  //baserect.top = vtopleft.y_;
+  //baserect.right = vbotright.x_;
+  //baserect.bottom = vbotright.y_;
 
-  D2D1_ROUNDED_RECT rrect(D2D1::RoundedRect(baserect, 8.0f, 8.0f));
-  /*float old_opacity = bluebrush->GetOpacity();
-  bluebrush->SetOpacity(0.25f);*/
-  rtarget->FillRoundedRectangle(rrect, bluebrush);
-  //bluebrush->SetOpacity(old_opacity);
+  //D2D1_ROUNDED_RECT rrect(D2D1::RoundedRect(baserect, 8.0f, 8.0f));
+  ///*float old_opacity = bluebrush->GetOpacity();
+  //bluebrush->SetOpacity(0.25f);*/
+  //rtarget->FillRoundedRectangle(rrect, bluebrush);
+  ////bluebrush->SetOpacity(old_opacity);
+
+  //testbtn_->Draw(renderer);
+
+  GameResourceCache* res_cache(base::LazyUniqueInstance<GameResourceCache>::Get());
+  ID2D1Bitmap* background_bmp = res_cache->GetBitmapHandle(K_BKFileName);
+  assert(background_bmp);
+  rtarget->DrawBitmap(
+    background_bmp, 
+    D2D1::RectF(topleft_.x_, topleft_.y_, bottomright_.x_, bottomright_.y_)
+    );
 
   testbtn_->Draw(renderer);
 }

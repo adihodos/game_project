@@ -85,6 +85,7 @@ private :
   bool                                            pause_flag_;
   float                                           last_time_;
   scoped_pointer<ScreenManager>                   scmgr_;
+  RECT                                            old_clip_rect_;
 
   NO_CPY_CONSTRUCTORS(GameEngine);
 };

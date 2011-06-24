@@ -36,9 +36,12 @@ GameEngine::GameEngine()
     r_bkbrush_(),
     pause_flag_(false),
     last_time_(timeGetTime()),
-    scmgr_() {}
+    scmgr_(),
+    old_clip_rect_() {}
 
-GameEngine::~GameEngine() {}
+GameEngine::~GameEngine() {
+  ::ClipCursor(nullptr);
+}
 
 bool
 GameEngine::Initialize(HINSTANCE inst, int width, int height) {
@@ -64,14 +67,17 @@ GameEngine::Initialize(HINSTANCE inst, int width, int height) {
   classdata.lpszMenuName = nullptr;
   classdata.lpszClassName = K_WindowClassName;
 
+
+  if (!::RegisterClassExW(&classdata))
+    return false;
+
   RECT windowrect;
   windowrect.left = windowrect.top = 0;
   windowrect.right = client_width_;
   windowrect.bottom = client_height_;
   ::AdjustWindowRectEx(&windowrect, WS_POPUP, false, WS_EX_APPWINDOW);
 
-  if (!::RegisterClassExW(&classdata))
-    return false;
+  //assert(::ClipCursor(&windowrect));
 
   client_window_ = ::CreateWindowExW(
     WS_EX_APPWINDOW, K_WindowClassName, L"Asteroid blaster!!", WS_POPUP,
@@ -99,48 +105,10 @@ GameEngine::Initialize(HINSTANCE inst, int width, int height) {
 
   scmgr_->SetActiveScreen(ScreenManager::SM_MainScreen);
 
-  ////
-  //// Load the bitmap and create the brush
-  //ID2D1Bitmap* bitmap = nullptr;
-  //std::wstring filepath(utility::GetApplicationResourceDirectory());
-  //filepath.append(GameEngine::K_BKFileName);
-
-  //HRESULT ret_code = utility::LoadBitmapFromFile(
-  //  r2d2_render_->GetRendererTarget(),
-  //  r2d2_render_->GetImagingFactory(),
-  //  filepath.c_str(),
-  //  0,
-  //  0,
-  //  &bitmap);
-
-  //if (FAILED(ret_code))
-  //  return false;
-
-  //ID2D1BitmapBrush* tmpbrush = nullptr;
-  //ret_code = r2d2_render_->GetRendererTarget()->CreateBitmapBrush(bitmap, &tmpbrush);
-  //if (FAILED(ret_code))
-  //  return false;
-  //r_bkbrush_.reset(tmpbrush);
-
-  //player_ship_.reset(new SA32_Thunderbolt(
-  //  r2d2_render_->GetRendererTarget(),
-  //  r2d2_render_->GetImagingFactory(),
-  //  client_centre_));
-
-  //meteorlist_.push_back(new SpaceMeteorite(
-  //  r2d2_render_->GetRendererTarget(),
-  //  r2d2_render_->GetImagingFactory(),
-  //  gfx::vector2D(client_centre_.x_ + 250, client_centre_.y_ + 250),
-  //  40));
-
-  //meteorlist_.push_back(new SpaceMeteorite(
-  //  r2d2_render_->GetRendererTarget(),
-  //  r2d2_render_->GetImagingFactory(),
-  //  gfx::vector2D(client_centre_.x_ - 250, client_centre_.y_ - 250),
-  //  90));
-
   ::ShowWindow(client_window_, SW_NORMAL);
   ::UpdateWindow(client_window_);
+  BOOL ret_val = ClipCursor(&windowrect);
+  assert(ret_val);
   return true;
 }
 

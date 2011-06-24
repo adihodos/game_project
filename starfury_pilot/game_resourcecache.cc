@@ -49,7 +49,10 @@ ID2D1Bitmap* GameResourceCache::GetBitmapHandle(const wchar_t* rsrcname) {
   fpath.append(rsrcname);
 
   ID2D1Bitmap* bitmap;
-  if (!utility::LoadBitmapFromFile(rtarget_, imgfactory_.get(), fpath.c_str(), 0, 0, &bitmap))
+  HRESULT ret_code = utility::LoadBitmapFromFile(
+    rtarget_, imgfactory_.get(), fpath.c_str(), 0, 0, &bitmap);
+
+  if (FAILED(ret_code))
     return nullptr;
 
   bitmap_cache_.insert(GRC_BitmapCache::value_type(rsrcname, bitmap));

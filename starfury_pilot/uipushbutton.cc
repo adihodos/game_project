@@ -116,7 +116,10 @@ void UIPushButton::Draw(Direct2DRenderer* renderer) {
       if (skin_hovered_) {
         r->DrawBitmap(rsrccache->GetBitmapHandle(skin_hovered_), rect);
       } else {
-        r->FillRectangle(rect, rsrccache->GetSolidColorBrushHandle(color_hovered_));
+        ID2D1SolidColorBrush* brush(rsrccache->GetSolidColorBrushHandle(color_hovered_));
+        brush->SetOpacity(0.5f);
+        //r->FillRectangle(rect, rsrccache->GetSolidColorBrushHandle(color_hovered_));
+        r->FillRectangle(rect, brush);
       }
     } else {
       if (skin_normal_) {
