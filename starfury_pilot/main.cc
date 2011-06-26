@@ -1,6 +1,7 @@
 #include "precompiled.h"
 #include "atexit_manager.h"
 #include "game_engine.h"
+#include "game_settings_provider.h"
 #include "lazy_unique_instance.h"
 #include "helpers.h"
 #include "resultwrapper.h"
@@ -36,6 +37,10 @@ INT WINAPI wWinMain(
   int cmd_show
   )
 {
+  UNREFERENCED_PARAMETER(prv_inst);
+  UNREFERENCED_PARAMETER(cmd_line);
+  UNREFERENCED_PARAMETER(cmd_show);
+
   com_initialize_helper init_com;
 
   if (!init_com) {
@@ -48,12 +53,17 @@ INT WINAPI wWinMain(
 
     app_instance = instance;
 
-    SIZE screensize;
-    if (!utility::GetScreenSize(&screensize))
-      return EXIT_FAILURE;
+    game_logic::GameSettingsProvider* settings_provider(
+      base::LazyUniqueInstance<game_logic::GameSettingsProvider>::Get());
+
+    if (!settings_provider->initialize()) {
+      ::MessageBoxW(nullptr, L"Error", L"Error", MB_ICONERROR);
+      return -1;
+    }
 
     if (!base::LazyUniqueInstance<GameEngine>::Get()->Initialize(
-        instance, screensize.cx, screensize.cy)) {   
+        instance, settings_provider->get_screen_width(),
+        settings_provider->get_screen_height())) {   
         ::MessageBoxW(nullptr, L"Error!", L"Failed to initialize!", MB_ICONERROR);
     } else {
       base::LazyUniqueInstance<GameEngine>::Get()->RunMainLoop();

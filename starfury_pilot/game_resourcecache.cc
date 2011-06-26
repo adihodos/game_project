@@ -104,7 +104,9 @@ ID2D1BitmapBrush* GameResourceCache::GetBitmapBrushHandle(const wchar_t* bmpname
 }
 
 IDWriteTextFormat*
-GameResourceCache::GetFontHandle(const GameFontData& fdata) {
+GameResourceCache::GetFontHandle(const game_ui::GameFontData& fdata) {
+  using game_ui::GameFontData;
+
   auto fnt_itr = font_cache_.find(fdata);
   if (fnt_itr != font_cache_.end())
     return fnt_itr->second.get();

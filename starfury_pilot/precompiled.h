@@ -28,6 +28,11 @@
 #endif
 
 #define NTDDI_VERSION NTDDI_WIN7
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 #include <Windows.h>
 #include <WindowsX.h>
 #include <tchar.h>

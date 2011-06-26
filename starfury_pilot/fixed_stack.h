@@ -1,6 +1,9 @@
-#pragma once
+#ifndef FIXED_STACK_H__
+#define FIXED_STACK_H__
 
 #include <cassert>
+
+namespace base {
 
 template<typename T, int maxsize>
 class fixed_stack {
@@ -48,3 +51,7 @@ private :
   T     elements_[maxsize];
   int   index_;
 };
+
+} // ns base
+
+#endif // FIXED_STACK_H__

@@ -79,23 +79,25 @@
   <ItemGroup>
     <ClInclude Include="atexit_manager.h" />
     <ClInclude Include="basetypes.h" />
+    <ClInclude Include="button_base.h" />
+    <ClInclude Include="control_container.h" />
     <ClInclude Include="d2drenderer.h" />
     <ClInclude Include="fixed_stack.h" />
     <ClInclude Include="game_engine.h" />
     <ClInclude Include="game_resourcecache.h" />
+    <ClInclude Include="game_screen.h" />
+    <ClInclude Include="game_settings_provider.h" />
     <ClInclude Include="hashfunc.h" />
     <ClInclude Include="helpers.h" />
     <ClInclude Include="icollidable.h" />
     <ClInclude Include="idrawable.h" />
     <ClInclude Include="gamefont.h" />
-    <ClInclude Include="igamescreen.h" />
     <ClInclude Include="ikeyboardeventreceiver.h" />
     <ClInclude Include="imouseeventreceiver.h" />
     <ClInclude Include="iprojectile.h" />
     <ClInclude Include="ispaceship.h" />
-    <ClInclude Include="iuicomponent.h" />
     <ClInclude Include="lazy_unique_instance.h" />
-    <ClInclude Include="mainscreen.h" />
+    <ClInclude Include="main_screen.h" />
     <ClInclude Include="meteor.h" />
     <ClInclude Include="precompiled.h" />
     <ClInclude Include="resource.h" />
@@ -105,21 +107,25 @@
     <ClInclude Include="sa32_thunderbolt.h" />
     <ClInclude Include="scoped_handle.h" />
     <ClInclude Include="scoped_pointer.h" />
+    <ClInclude Include="screen_component.h" />
     <ClInclude Include="screen_manager.h" />
-    <ClInclude Include="uipushbutton.h" />
+    <ClInclude Include="solidcolor_button.h" />
     <ClInclude Include="ui_factory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="atexit_manager.cc" />
+    <ClCompile Include="button_base.cc" />
+    <ClCompile Include="control_container.cc" />
     <ClCompile Include="d2drender.cc" />
     <ClCompile Include="game_engine.cc" />
     <ClCompile Include="game_resourcecache.cc" />
+    <ClCompile Include="game_screen.cc" />
+    <ClCompile Include="game_settings_provider.cc" />
     <ClCompile Include="hashfunc.cc" />
     <ClCompile Include="helpers.cc" />
     <ClCompile Include="icollidable.cc" />
-    <ClCompile Include="iuicomponent.cc" />
     <ClCompile Include="main.cc" />
-    <ClCompile Include="mainscreen.cc" />
+    <ClCompile Include="main_screen.cc" />
     <ClCompile Include="meteor.cc" />
     <ClCompile Include="precompiled.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -127,8 +133,9 @@
     <ClCompile Include="sa32_plasmabolt.cc" />
     <ClCompile Include="sa32_rocket.cc" />
     <ClCompile Include="sa32_thunderbolt.cc" />
+    <ClCompile Include="screen_component.cc" />
     <ClCompile Include="screen_manager.cc" />
-    <ClCompile Include="uipushbutton.cc" />
+    <ClCompile Include="solidcolor_button.cc" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="starfury_pilot.rc" />

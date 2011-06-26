@@ -2,16 +2,15 @@
 #include "d2drenderer.h"
 #include "game_engine.h"
 #include "game_resourcecache.h"
+#include "game_screen.h"
 #include "helpers.h"
 #include "icollidable.h"
-#include "igamescreen.h"
 #include "ispaceship.h"
 #include "iprojectile.h"
 #include "lazy_unique_instance.h"
 #include "meteor.h"
 #include "resource.h"
 #include "sa32_thunderbolt.h"
-#include "screen_manager.h"
 
 namespace {
 
@@ -35,8 +34,7 @@ GameEngine::GameEngine()
     r2d2_render_(),
     r_bkbrush_(),
     pause_flag_(false),
-    last_time_(timeGetTime()),
-    scmgr_(),
+    last_time_(static_cast<float>(timeGetTime())),
     old_clip_rect_() {}
 
 GameEngine::~GameEngine() {
@@ -44,7 +42,7 @@ GameEngine::~GameEngine() {
 }
 
 bool
-GameEngine::Initialize(HINSTANCE inst, int width, int height) {
+GameEngine::Initialize(HINSTANCE inst, float width, float height) {
   assert(app_instance_ == nullptr);
   assert(client_window_ == nullptr);
 
@@ -73,8 +71,8 @@ GameEngine::Initialize(HINSTANCE inst, int width, int height) {
 
   RECT windowrect;
   windowrect.left = windowrect.top = 0;
-  windowrect.right = client_width_;
-  windowrect.bottom = client_height_;
+  windowrect.right = static_cast<int>(client_width_);
+  windowrect.bottom = static_cast<int>(client_height_);
   ::AdjustWindowRectEx(&windowrect, WS_POPUP, false, WS_EX_APPWINDOW);
 
   //assert(::ClipCursor(&windowrect));
@@ -99,11 +97,8 @@ GameEngine::Initialize(HINSTANCE inst, int width, int height) {
 
   r_pointer_ = r2d2_render_.get();
 
-  scmgr_.reset(new ScreenManager());
-  if (!scmgr_->Initialize())
+  if (!screen_mgr_.initialize())
     return false;
-
-  scmgr_->SetActiveScreen(ScreenManager::SM_MainScreen);
 
   ::ShowWindow(client_window_, SW_NORMAL);
   ::UpdateWindow(client_window_);
@@ -116,8 +111,6 @@ void GameEngine::ProjectileFired(IProjectile* projectile) {
   fired_projectiles_.push_back(projectile);
 }
 
-#pragma push_macro("max")
-#undef max
 void
 GameEngine::RunMainLoop() {
   MSG msg_data = { 0 } ;
@@ -127,11 +120,11 @@ GameEngine::RunMainLoop() {
       ::TranslateMessage(&msg_data);
       ::DispatchMessageW(&msg_data);
     } else {
-      render_objects();
+      if (!render_objects())
+        break;
     }
   }
 }
-#pragma pop_macro("max")
 
 LRESULT
 CALLBACK
@@ -181,20 +174,20 @@ GameEngine::Engine_WindowProc(
     return 0L;
     break;
 
-  case WM_LBUTTONDOWN : {
-    SetCapture(client_window_);
-    MouseEventArgs args(MouseEventArgs::FromLParamWParam(w_param, l_param));
-    scmgr_->LeftButtonDown(&args);
-                        }
-                        break;
+  case WM_KEYUP :
+    handle_keyreleased(w_param, l_param);
+    return 0L;
+    break;
 
-  case WM_LBUTTONUP : {
-    ReleaseCapture();
-    MouseEventArgs args(MouseEventArgs::FromLParamWParam(w_param, l_param));
-    scmgr_->LeftButtonUp(&args);
-  }
-                      return 0L;
-  break;
+  case WM_LBUTTONDOWN : 
+    handle_lefbutton_down(w_param, l_param);
+    return 0L;
+    break;
+
+  case WM_LBUTTONUP : 
+    handle_leftbutton_up(w_param, l_param);
+    return 0L;
+    break;
 
   case WM_ACTIVATE :
     handle_wm_activate(
@@ -208,8 +201,10 @@ GameEngine::Engine_WindowProc(
     break;
 
   default :
-    return ::DefWindowProcW(client_window_, msg_code, w_param, l_param);
+    break;
   }  
+
+  return ::DefWindowProcW(client_window_, msg_code, w_param, l_param);
 }
 
 void GameEngine::handle_wm_close() {
@@ -217,18 +212,40 @@ void GameEngine::handle_wm_close() {
 }
 
 void GameEngine::handle_wm_activate(bool activated, bool minimized) {
-  //OUT_DBG_MSG(L"Window is %s, minimized %s", activated ? L"activated" : L"deactivated", minimized ? L"true" : L"false");
-  /*if (activated && !minimized) {
-    ::SetCapture(client_window_);
-    return;
+  OUT_DBG_MSG(L"Window is %s, minimized %s", activated ? L"activated" : L"deactivated", minimized ? L"true" : L"false");
+  if (!activated) {
+    //
+    // Restore cursor move area if losing focus
+    ::ClipCursor(nullptr);
+  } else {
+    //
+    // confine cursor to window
+    RECT window_geometry;
+    ::GetClientRect(client_window_, &window_geometry);
+    ::ClipCursor(&window_geometry);
   }
+}
 
-  ReleaseCapture();*/
+void GameEngine::handle_lefbutton_down(WPARAM w_param, LPARAM l_param) {
+  ::SetCapture(client_window_);
+  MouseEventArgs ms_args(MouseEventArgs::FromLParamWParam(w_param, l_param));
+  screen_mgr_.LeftButtonDown(&ms_args);
+}
+
+void GameEngine::handle_leftbutton_up(WPARAM w_param, LPARAM l_param) {
+  ::ReleaseCapture();
+  MouseEventArgs ms_args(MouseEventArgs::FromLParamWParam(w_param, l_param));
+  screen_mgr_.LeftButtonUp(&ms_args);
 }
 
 void GameEngine::handle_mouse_move(WPARAM w, LPARAM l) {
   MouseEventArgs args(MouseEventArgs::FromLParamWParam(w, l));
-  scmgr_->MouseMoved(&args);
+  screen_mgr_.MouseMoved(&args);
+}
+
+void GameEngine::handle_keyreleased(WPARAM w_param, LPARAM l_param) {
+  KeyboardEventArgs kb_args(w_param, l_param);
+  screen_mgr_.KeyReleased(&kb_args);
 }
 
 void GameEngine::handle_keypress(UINT virt_code) {
@@ -254,10 +271,16 @@ void GameEngine::handle_keypress(UINT virt_code) {
 
   //if (keystate[VK_CONTROL] & (1 << 7))
   //    player_ship_->FirePlasmaGun(this);
+  KeyboardEventArgs kb_args(virt_code, 0);
+  screen_mgr_.KeyPressed(&kb_args);
 }
 
-void GameEngine::render_objects() {
-  float current_time = timeGetTime();
+bool GameEngine::render_objects() {
+  game_ui::IGameScreen* active_screen = screen_mgr_.get_active_screen();
+  if (!active_screen)
+    return false;
+
+  float current_time = static_cast<float>(timeGetTime());
   float delta_time = (current_time - last_time_) * 0.001f;
 
   //
@@ -266,9 +289,7 @@ void GameEngine::render_objects() {
 
   r2d2_render_->BeginRenderContent();
 
-  IGameScreen* active_screen(scmgr_->GetActiveScreen());
-  if (active_screen)
-    active_screen->Draw(r_pointer_);
+  active_screen->Draw(r_pointer_);
 
   /*r2d2_render_->GetRendererTarget()->FillRectangle(
     D2D1::RectF(0, 0, client_width_, client_height_),
@@ -307,11 +328,14 @@ void GameEngine::render_objects() {
 
   r2d2_render_->EndRenderingContent();
   last_time_ = current_time;
+  return true;
 }
 
 void GameEngine::UpdateProjectilePositions(float delta) {
-  RECT window_geometry;
-  GetClientRect(client_window_, &window_geometry);
+  RECT wrect;
+  ::GetClientRect(client_window_, &wrect);
+  D2D1_RECT_F window_geometry = D2D1::RectF(
+    wrect.left, wrect.top, wrect.right, wrect.bottom);
 
   auto itr = fired_projectiles_.begin();
   auto list_end = fired_projectiles_.end();
@@ -355,12 +379,9 @@ void GameEngine::UpdateProjectilePositions(float delta) {
       continue;
     }
 
-    POINT projectile_location = { 
-      current_projectile->GetPosition()->x_,
-      current_projectile->GetPosition()->y_
-    };
-
-    if (!PtInRect(&window_geometry, projectile_location)) {
+    if (!utility::point_in_rect(current_projectile->GetPosition()->x_, 
+                                current_projectile->GetPosition()->y_, 
+                                window_geometry)) {
       //
       // out of the client window, so destroy it
       delete *itr;

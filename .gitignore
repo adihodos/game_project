@@ -3,3 +3,4 @@ ipch
 Release
 *.sdf
 *.suo
+*.opensdf

@@ -11,6 +11,10 @@
 #include "lazy_unique_instance.h"
 #include "scoped_pointer.h"
 
+namespace game_ui {
+struct GameFontData;
+}
+
 struct D2D1ColorFComparator : public std::binary_function<D2D1_COLOR_F, D2D1_COLOR_F, bool> {
   bool operator()(const D2D1_COLOR_F& lhs, const D2D1_COLOR_F& rhs) const {
     return lhs.a == rhs.a && lhs.b == rhs.b && lhs.g == lhs.g && lhs.r == rhs.r;
@@ -23,8 +27,8 @@ struct D2D1ColorFHasher : public std::unary_function<D2D1_COLOR_F, size_t> {
   }
 };
 
-struct GameFontDataHasher : public std::unary_function<GameFontData, size_t> {
-  size_t operator()(const GameFontData& fdata) const {
+struct GameFontDataHasher : public std::unary_function<game_ui::GameFontData, size_t> {
+  size_t operator()(const game_ui::GameFontData& fdata) const {
     return fdata.Hash();
   }
 };
@@ -43,7 +47,7 @@ public :
 
   ID2D1BitmapBrush* GetBitmapBrushHandle(const wchar_t* bmpfile);
 
-  IDWriteTextFormat* GetFontHandle(const GameFontData& fdata);
+  IDWriteTextFormat* GetFontHandle(const game_ui::GameFontData& fdata);
 
   void DiscardAllCachedResources();
 
@@ -60,7 +64,7 @@ private :
                              ID2D1SolidColorBrush*, D2D1ColorFHasher, 
                              D2D1ColorFComparator>            GRC_SCBrushCache;
   typedef std::unordered_map<
-    GameFontData, std::shared_ptr<IDWriteTextFormat>, GameFontDataHasher>
+    game_ui::GameFontData, std::shared_ptr<IDWriteTextFormat>, GameFontDataHasher>
                                                               GRC_FontCache;
 
   ID2D1HwndRenderTarget*                                    rtarget_;

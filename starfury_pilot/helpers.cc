@@ -12,6 +12,9 @@ utility::LoadBitmapFromFile(
   ID2D1Bitmap **ppBitmap
   )
 {
+  UNREFERENCED_PARAMETER(destinationHeight);
+  UNREFERENCED_PARAMETER(destinationWidth);
+
   assert(pRenderTarget);
   assert(pIWICFactory);
   assert(uri);
@@ -71,6 +74,9 @@ utility::LoadResourceBitmap(
   ID2D1Bitmap **ppBitmap
   )
 {
+  UNREFERENCED_PARAMETER(destinationHeight);
+  UNREFERENCED_PARAMETER(destinationWidth);
+
   assert(pRenderTarget);
   assert(pIWICFactory);
   assert(resourceName);
@@ -208,7 +214,6 @@ utility::GetApplicationBaseDirectory(
   assert(dst_dir);
   dst_dir->clear();
 
-  size_t capacity = 512;
   wchar_t namebuff[512];
 
   DWORD buff_size = ::GetModuleFileNameW(nullptr, namebuff, _countof(namebuff));
@@ -240,7 +245,7 @@ bool utility::GetScreenSize(SIZE* dim) {
   assert(dim != nullptr);
 
   DEVMODEW dinfo;
-  if (!EnumDisplaySettingsW(nullptr, ENUM_CURRENT_SETTINGS, &dinfo))
+  if (!::EnumDisplaySettingsW(nullptr, ENUM_CURRENT_SETTINGS, &dinfo))
     return false;
 
   dim->cx = dinfo.dmPelsWidth;

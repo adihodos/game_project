@@ -6,6 +6,7 @@ bool ICollidable::CollidesWith(
   gfx::vector2D* collision_pos
   )
 {
+  UNREFERENCED_PARAMETER(collision_pos);
   gfx::circle other_c(*other.GetBoundingCircle());
   gfx::circle this_c(*GetBoundingCircle());
   gfx::vector2D testv(this_c.center_ - other_c.center_);

@@ -46,6 +46,7 @@ SpaceMeteorite::SpaceMeteorite(
 }
 
 void SpaceMeteorite::UpdatePosition(float delta_tm) {
+  UNREFERENCED_PARAMETER(delta_tm);
   //
   // meteorites don't move for now
   assert(false);

@@ -1,12 +1,15 @@
-#pragma once
+#ifndef SCREEN_MANAGER_H__
+#define SCREEN_MANAGER_H__
 
 #include "basetypes.h"
+#include "fixed_stack.h"
+#include "game_screen.h"
 #include "ikeyboardeventreceiver.h"
 #include "imouseeventreceiver.h"
 
-class IGameScreen;
+namespace game_ui {
 
-class ScreenManager : public IKeyboardEventReceiver, public IMouseEventReceiver {
+class Screen_Manager : public IKeyboardEventReceiver, public IMouseEventReceiver {
 public :
 
   enum Screens {
@@ -16,56 +19,63 @@ public :
     SM_OptionsScreen
   };
 
-  ScreenManager()
-    : activeidx_(0) { memset(screens_, 0, sizeof(screens_)); }
+  Screen_Manager();
 
-  bool Initialize();
+  ~Screen_Manager();
+
+  bool initialize();
+
+  void set_screen_inactive(IGameScreen* screen) {
+    assert(!working_stack_.empty());
+    assert(working_stack_.top() == screen);
+    working_stack_.pop();
+  }
+
+  void set_screen_active(IGameScreen* screen) {
+    working_stack_.push(screen);
+  }
+
+  IGameScreen* get_active_screen() const {
+    return working_stack_.empty() ? nullptr : working_stack_.top();
+  }
 
   bool KeyPressed(KeyboardEventArgs* kargs) {
-    return GetActiveScreen()->KeyPressed(kargs);
+    return get_active_screen()->KeyPressed(kargs);
   }
 
   bool KeyReleased(KeyboardEventArgs* kargs) {
-    return GetActiveScreen()->KeyReleased(kargs);
+    return get_active_screen()->KeyReleased(kargs);
   }
 
-  bool LeftButtonDown(MouseEventArgs* msargs) {
-    return GetActiveScreen()->LeftButtonDown(msargs);
+  bool LeftButtonDown(MouseEventArgs* m_args) {
+    return get_active_screen()->LeftButtonDown(m_args);
   }
 
-  bool LeftButtonUp(MouseEventArgs* args) {
-    return GetActiveScreen()->LeftButtonUp(args);
+  bool LeftButtonUp(MouseEventArgs* m_args) {
+    return get_active_screen()->LeftButtonUp(m_args);
   }
 
-  bool RightButtonDown(MouseEventArgs* msargs) {
-    return GetActiveScreen()->RightButtonDown(msargs);
+  bool RightButtonDown(MouseEventArgs* m_args) {
+    return get_active_screen()->RightButtonDown(m_args);
   }
 
-  bool RightButtonUp(MouseEventArgs* args) {
-    return GetActiveScreen()->RightButtonUp(args);
+  bool RightButtonUp(MouseEventArgs* m_args) {
+    return get_active_screen()->RightButtonUp(m_args);
   }
 
-  bool MouseMoved(MouseEventArgs* args) {
-    return GetActiveScreen()->MouseMoved(args);
-  }
-
-  void Draw(Direct2DRenderer* r) {
-    GetActiveScreen()->Draw(r);
-  }
-
-  void SetActiveScreen(ScreenManager::Screens scr) {
-    assert(scr >= SM_MainScreen && scr <= SM_OptionsScreen);
-    activeidx_ = scr;
-  }
-
-  IGameScreen* GetActiveScreen() const {
-    assert(activeidx_ >= SM_MainScreen && activeidx_ <= SM_OptionsScreen);
-    assert(screens_[activeidx_] != nullptr);
-    return screens_[activeidx_];
+  bool MouseMoved(MouseEventArgs* m_args) {
+    return get_active_screen()->MouseMoved(m_args);
   }
 
 private :
-  IGameScreen*  screens_[4];
-  int           activeidx_;
-  NO_CPY_CONSTRUCTORS(ScreenManager);
+  //
+  // adjust this if screens may go deep more than 8 levels
+  static const int K_default_screens_maxdepth = 8;  
+  base::fixed_stack<IGameScreen*, K_default_screens_maxdepth>   working_stack_;
+  IGameScreen*                                                  screens_[4];
+  NO_CPY_CONSTRUCTORS(Screen_Manager);
 };
+
+} // ns game_ui
+
+#endif // SCREEN_MANAGER_H__

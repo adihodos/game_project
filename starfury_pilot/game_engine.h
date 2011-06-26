@@ -8,17 +8,21 @@
 #include "lazy_unique_instance.h"
 #include "scoped_handle.h"
 #include "scoped_pointer.h"
+#include "screen_manager.h"
 
 class ISpaceShip;
 class IProjectile;
 class ICollidable;
 class GameResourceCache;
-class ScreenManager;
 class Direct2DRenderer;
+
+namespace game_ui {
+class Screen_Manager;
+}
 
 class GameEngine : private base::LazyUniqueInstanceLifeTraits<GameEngine> {
 public :
-  bool Initialize(HINSTANCE app_instance, int width, int height);
+  bool Initialize(HINSTANCE app_instance, float width, float height);
 
   void RunMainLoop();
 
@@ -48,7 +52,7 @@ private :
     LPARAM lparam
     );
 
-  void render_objects();
+  bool render_objects();
 
   void UpdateProjectilePositions(float delta);
 
@@ -62,6 +66,12 @@ private :
 
   void handle_keypress(UINT virt_code);
 
+  void handle_keyreleased(WPARAM w_param, LPARAM l_param);
+
+  void handle_lefbutton_down(WPARAM w_param, LPARAM l_param);
+
+  void handle_leftbutton_up(WPARAM w_param, LPARAM l_param);
+
   void handle_mouse_move(WPARAM w, LPARAM l);
 
   void handle_wm_activate(bool activated, bool minimized);
@@ -71,8 +81,8 @@ private :
 
   HINSTANCE                                       app_instance_;
   HWND                                            client_window_;
-  int                                             client_width_;
-  int                                             client_height_;
+  float                                           client_width_;
+  float                                           client_height_;
   gfx::vector2D                                   client_centre_;
   scoped_pointer<ISpaceShip>                      player_ship_;
   std::list<IProjectile*>                         fired_projectiles_;
@@ -84,7 +94,8 @@ private :
   scoped_pointer<ID2D1BitmapBrush, D2DInterface>  r_bkbrush_;
   bool                                            pause_flag_;
   float                                           last_time_;
-  scoped_pointer<ScreenManager>                   scmgr_;
+  //scoped_pointer<ScreenManager>                   scmgr_;
+  game_ui::Screen_Manager                         screen_mgr_;
   RECT                                            old_clip_rect_;
 
   NO_CPY_CONSTRUCTORS(GameEngine);

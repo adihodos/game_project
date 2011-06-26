@@ -72,13 +72,7 @@
     <ClInclude Include="imouseeventreceiver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="igamescreen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="fixed_stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mainscreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="screen_manager.h">
@@ -96,16 +90,31 @@
     <ClInclude Include="hashfunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="iuicomponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="uipushbutton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ui_factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gamefont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="screen_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main_screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_settings_provider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="solidcolor_button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="button_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control_container.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -143,9 +152,6 @@
     <ClCompile Include="screen_manager.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainscreen.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="game_resourcecache.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -155,10 +161,25 @@
     <ClCompile Include="hashfunc.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="uipushbutton.cc">
+    <ClCompile Include="main_screen.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="iuicomponent.cc">
+    <ClCompile Include="game_settings_provider.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_screen.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="solidcolor_button.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="control_container.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="button_base.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="screen_component.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

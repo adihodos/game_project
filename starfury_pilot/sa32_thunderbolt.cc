@@ -32,6 +32,7 @@ SA32_Thunderbolt::SA32_Thunderbolt(
     testbrush_(),
     leftrpod_(false)
 {
+  UNREFERENCED_PARAMETER(lives);
   std::wstring filepath(utility::GetApplicationResourceDirectory());
   filepath.append(SA32_Thunderbolt::K_ResourceFileName);
 
@@ -137,7 +138,7 @@ void SA32_Thunderbolt::Rotate(float amount) {
 void SA32_Thunderbolt::MoveX(float direction /* = 0.0f */) {
   float move_amount = 4.0f * direction;
   float wingpos = position_.x_ + move_amount + (ship_geometry_.width / 2) * direction;
-  POINT newpt = { static_cast<int>(wingpos), position_.y_ };
+  POINT newpt = { static_cast<int>(wingpos), static_cast<int>(position_.y_) };
   RECT rc = { 0, 0, 1280, 1024 };
 
   if (PtInRect(&rc, newpt))

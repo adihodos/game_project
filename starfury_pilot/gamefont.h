@@ -1,7 +1,10 @@
-#pragma once
+#ifndef GAMEFONT_DATA_H__
+#define GAMEFONT_DATA_H__
 
 #include <string>
 #include "hashfunc.h"
+
+namespace game_ui {
 
 struct GameFontData {
   static const int DefaultSize = 10;
@@ -68,3 +71,7 @@ private :
   float         gfd_size_;
   int           gfd_style_and_weight_;
 };
+
+} // ns game_ui
+
+#endif // GAMEFONT_DATA_H__
