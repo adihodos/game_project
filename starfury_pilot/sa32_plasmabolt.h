@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SA32_PLASMABOLT_H__
+#define SA32_PLASMABOLT_H__
 
 #include <d2d1.h>
 #include <gfx/circle.h>
@@ -10,11 +11,11 @@
 
 class Direct2DRenderer;
 
+namespace game_entity {
+
 class SA32_PlasmaBolt : public IProjectile {
 public :
   SA32_PlasmaBolt(
-    ID2D1RenderTarget* r_target, 
-    IWICImagingFactory* factory, 
     const gfx::vector2D& pos, 
     const gfx::vector2D& velocity
     );
@@ -52,11 +53,11 @@ private :
   gfx::vector2D                                             pos_;
   gfx::vector2D                                             velocity_;
   gfx::circle                                               bounding_circle_;
+  gfx::vector2D                                             size_;
   int                                                       hp_;
   int                                                       damage_;
-  scoped_pointer<ID2D1Bitmap, D2DInterface>                 texture_;
-  scoped_pointer<ID2D1BitmapBrush, D2DInterface>            plasmabrush_;
-  scoped_pointer<ID2D1SolidColorBrush, D2DInterface>        dbgbrush_;
-
-  NO_CPY_CONSTRUCTORS(SA32_PlasmaBolt);
 };
+
+} // ns game_logic
+
+#endif // !SA32_PLASMABOLT_H__

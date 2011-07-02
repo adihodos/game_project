@@ -50,7 +50,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;__WITH_DIRECT2D_SUPPORT__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -80,6 +80,7 @@
     <ClInclude Include="atexit_manager.h" />
     <ClInclude Include="basetypes.h" />
     <ClInclude Include="button_base.h" />
+    <ClInclude Include="cgamescreen.h" />
     <ClInclude Include="control_container.h" />
     <ClInclude Include="d2drenderer.h" />
     <ClInclude Include="fixed_stack.h" />
@@ -115,6 +116,7 @@
   <ItemGroup>
     <ClCompile Include="atexit_manager.cc" />
     <ClCompile Include="button_base.cc" />
+    <ClCompile Include="cgamescreen.cc" />
     <ClCompile Include="control_container.cc" />
     <ClCompile Include="d2drender.cc" />
     <ClCompile Include="game_engine.cc" />

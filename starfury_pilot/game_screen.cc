@@ -22,18 +22,18 @@ void game_ui::IGameScreen::set_inactive() {
   screen_manager_->set_screen_inactive(this);
 }
 
-void game_ui::IGameScreen::handle_focus_change(IScreenComponent* new_focused_object) {
+void game_ui::IGameScreen::handle_focus_change(Widget* new_focused_object) {
   if (new_focused_object) {
     if (new_focused_object != focused_object_) {
       if (focused_object_)
-        focused_object_->set_focus(false);
+        focused_object_->lost_focus();
 
       focused_object_ = new_focused_object;
-      focused_object_->set_focus();
+      focused_object_->received_focus();
     }
   } else {
     if (focused_object_) {
-      focused_object_->set_focus(false);
+      focused_object_->lost_focus();
       focused_object_ = nullptr;
     }
   }
@@ -57,9 +57,9 @@ void game_ui::IGameScreen::focus_next_control() {
 
   //
   // Take frocus from previous focused control
-  focused_object_->set_focus(false);
+  focused_object_->lost_focus();
   focused_object_ = child_itr->get();
   //
   // Give focus to the new control
-  focused_object_->set_focus(true);
+  focused_object_->received_focus();
 }

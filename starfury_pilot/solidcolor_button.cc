@@ -10,7 +10,7 @@
 game_ui::SolidColorButton::SolidColorButton(
   int identifier,
   const gfx::vector2D& pos, float width, float height, 
-  IScreenComponent* parent /* = nullptr */, 
+  Widget* parent /* = nullptr */, 
   const wchar_t* text /* = nullptr */, float frame_width /* = 0.0f */, 
   int color_normal /* = D2D1::ColorF::White */, 
   int color_hover /* = D2D1::ColorF::Yellow */, 
@@ -19,7 +19,7 @@ game_ui::SolidColorButton::SolidColorButton(
   int color_frame /* = D2D1::ColorF::Black */, 
   int color_text /* = D2D1::ColorF::Black */ 
   )
-  : game_ui::IScreenComponent(identifier, pos, width, height, parent), 
+  : game_ui::Widget(identifier, pos, width, height, parent), 
     text_(text ? text : L""), 
     frame_width_(frame_width), font_(L"Arial") {
     colors_[SCB_Normal] = D2D1::ColorF(color_normal);

@@ -9,7 +9,7 @@ class GameResourceCache;
 
 namespace game_ui {
 
-class IScreenComponent;
+class Widget;
 class Screen_Manager;
 
 class MainMenu_Screen : public IGameScreen {
@@ -38,7 +38,7 @@ public :
   void Draw(Direct2DRenderer* renderer);
 
 protected :
-  void on_button_clicked_or_keyactivated(IScreenComponent* child);
+  void on_button_clicked_or_keyactivated(Widget* child);
 
 private :
   GameResourceCache*                resource_provider_;

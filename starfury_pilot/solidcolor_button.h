@@ -16,12 +16,12 @@ class vector2D;
 
 namespace game_ui {
 
-class SolidColorButton : public IScreenComponent {
+class SolidColorButton : public Widget {
 public :
   SolidColorButton(
     int identifier,
     const gfx::vector2D& pos, float width, float height,
-    IScreenComponent* parent = nullptr,
+    Widget* parent = nullptr,
     const wchar_t* text = nullptr,
     float frame_width = 0.0f,
     int color_normal = D2D1::ColorF::White,
@@ -75,7 +75,7 @@ public :
   bool MouseMoved(MouseEventArgs* args);
 
 protected :
-  void on_child_activated(IScreenComponent*) { return; }
+  void on_child_activated(Widget*) { return; }
 
 private :
   enum {

@@ -1,6 +1,7 @@
 #ifndef GAMEENGINE_H__
 #define GAMEENGINE_H__
 
+#include <deque>
 #include <list>
 #include <d2d1.h>
 #include <gfx/vector2d.h>

@@ -117,6 +117,9 @@
     <ClInclude Include="control_container.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cgamescreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="precompiled.cc">
@@ -180,6 +183,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="screen_component.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cgamescreen.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

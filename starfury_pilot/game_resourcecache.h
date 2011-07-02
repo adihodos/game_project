@@ -51,6 +51,11 @@ public :
 
   void DiscardAllCachedResources();
 
+  bool get_texture_size(
+    const wchar_t* resource_filename,
+    gfx::vector2D* vec_size
+    );
+
 private :
   GameResourceCache();
 

@@ -19,8 +19,8 @@ public :
     return r_factory_.get();
   }
 
-  ID2D1RenderTarget* GetRendererTarget() const {
-    return r_target_.get();
+  ID2D1HwndRenderTarget* GetRendererTarget() const {
+    return static_cast<ID2D1HwndRenderTarget*>(r_target_.get());
   }
 
   IWICImagingFactory* GetImagingFactory() const {

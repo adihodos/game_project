@@ -104,7 +104,7 @@ void game_ui::MainMenu_Screen::Draw(Direct2DRenderer* renderer) {
   // draw child controls
   std::for_each(
     children_.begin(), children_.end(), 
-    [renderer](std::shared_ptr<IScreenComponent>& child_ptr) {
+    [renderer](std::shared_ptr<Widget>& child_ptr) {
       child_ptr->Draw(renderer);
   });
 }
@@ -115,7 +115,7 @@ bool game_ui::MainMenu_Screen::KeyPressed(KeyboardEventArgs* kb_args) {
     return true;
   }
 
-  IScreenComponent* child = child_consumes_event(&IScreenComponent::KeyPressed, kb_args);
+  Widget* child = child_consumes_event(&Widget::KeyPressed, kb_args);
   if (child) {
     on_button_clicked_or_keyactivated(child);
   }
@@ -123,12 +123,12 @@ bool game_ui::MainMenu_Screen::KeyPressed(KeyboardEventArgs* kb_args) {
 }
 
 bool game_ui::MainMenu_Screen::KeyReleased(KeyboardEventArgs* kb_args) {
-  child_consumes_event(&IScreenComponent::KeyReleased, kb_args);
+  child_consumes_event(&Widget::KeyReleased, kb_args);
   return true;
 }
 
 bool game_ui::MainMenu_Screen::LeftButtonDown(MouseEventArgs* ms_args) {
-  IScreenComponent* child = child_consumes_event(&IScreenComponent::LeftButtonDown,  ms_args);
+  Widget* child = child_consumes_event(&Widget::LeftButtonDown,  ms_args);
   handle_focus_change(child);
   if (child)
     on_button_clicked_or_keyactivated(child);
@@ -137,7 +137,7 @@ bool game_ui::MainMenu_Screen::LeftButtonDown(MouseEventArgs* ms_args) {
 }
 
 bool game_ui::MainMenu_Screen::LeftButtonUp(MouseEventArgs* ms_args) {
-  child_consumes_event(&IScreenComponent::LeftButtonUp, ms_args);
+  child_consumes_event(&Widget::LeftButtonUp, ms_args);
   return true;
 }
 
@@ -155,11 +155,11 @@ bool game_ui::MainMenu_Screen::MouseMoved(MouseEventArgs* ms_args) {
     [ms_args](IScreenComponentContainer::value_type childp) {
       childp->MouseMoved(ms_args);
   });*/
-  child_consumes_event(&IScreenComponent::MouseMoved, ms_args);
+  child_consumes_event(&Widget::MouseMoved, ms_args);
   return true;
 }
 
-void game_ui::MainMenu_Screen::on_button_clicked_or_keyactivated(IScreenComponent* child) {
+void game_ui::MainMenu_Screen::on_button_clicked_or_keyactivated(Widget* child) {
 
   switch (child->get_id()) {
   case MainMenu_Controls::MM_CID_NewGame :

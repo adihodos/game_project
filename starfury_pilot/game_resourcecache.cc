@@ -189,3 +189,21 @@ void GameResourceCache::DiscardAllCachedResources() {
   bitmapbrush_cache_.clear();
   solidcolorbrush_cache_.clear();
 }
+
+bool GameResourceCache::get_texture_size( 
+  const wchar_t* resource_filename, 
+  gfx::vector2D* vec_size 
+  )
+{
+  assert(resource_filename);
+  assert(vec_size);
+
+  ID2D1Bitmap* bitmap(GetBitmapHandle(resource_filename));
+  if (!bitmap)
+    return false;
+
+  D2D1_SIZE_F bitmap_size(bitmap->GetSize());
+  vec_size->x_ = bitmap_size.width;
+  vec_size->y_ = bitmap_size.height;
+  return true;
+}

@@ -9,16 +9,16 @@
 
 namespace game_ui {
 
-class IScreenComponent : 
+class Widget : 
   public IDrawable, public IKeyboardEventReceiver, public IMouseEventReceiver {
 public :
-  IScreenComponent(
+  Widget(
     int identifier,
     const gfx::vector2D& position, float width, float height, 
-    IScreenComponent* parent = nullptr
+    Widget* parent = nullptr
     );
 
-  virtual ~IScreenComponent();
+  virtual ~Widget();
 
   int get_id() const {
     return identifier_;
@@ -48,11 +48,11 @@ public :
     position_ = position;
   }
 
-  IScreenComponent* get_parent() const {
+  Widget* get_parent() const {
     return parent_;
   }
 
-  void set_parent(IScreenComponent* parent) {
+  void set_parent(Widget* parent) {
     parent_ = parent;
   }
 
@@ -77,20 +77,32 @@ public :
 
   void set_focus(bool focus = true) { focus_ = focus; }
 
+  virtual void lost_focus() { focus_ = false; }
+
+  virtual void received_focus() { focus_ = true; }
+
+  virtual void on_disabled() { enabled_ = false; }
+
+  virtual void on_enabled() { enabled_ = true; }
+
+  virtual void on_pressed() { pressed_ = true; }
+
+  virtual void on_depressed() { pressed_ = false;}
+
 protected :
-  virtual void on_child_activated(IScreenComponent* sender) = 0;
+  virtual void on_child_activated(Widget* sender) = 0;
 
   const int identifier_;
   gfx::vector2D position_;
   float width_;
   float height_;
-  IScreenComponent* parent_;
+  Widget* parent_;
   bool  pressed_;
   bool  hovered_;
   bool  enabled_;
   bool  focus_;
 
-  NO_CPY_CONSTRUCTORS(IScreenComponent);
+  NO_CPY_CONSTRUCTORS(Widget);
 };
 
 } // ns game_ui
