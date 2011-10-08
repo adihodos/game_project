@@ -82,3 +82,10 @@ private :
 
   NO_CPY_CONSTRUCTORS(GameResourceCache);
 };
+
+typedef base::LazyUniqueInstance<GameResourceCache> Game_ResourceCache;
+
+namespace game_logic {
+typedef scoped_pointer<ID2D1SolidColorBrush, D2DInterface>  RS_SolidColorBrush;
+typedef scoped_pointer<ID2D1BitmapBrush, D2DInterface>      RS_BitmapBrush;
+}

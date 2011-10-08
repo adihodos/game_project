@@ -27,15 +27,26 @@ public :
   float get_screen_depth() const {
     return static_cast<float>(screen_depth_);
   }
+
+  void set_instance(HINSTANCE instance) {
+    instance_ = instance;
+  }
+
+  HINSTANCE get_hinstance() const {
+    return instance_;
+  }
 private :
   friend class base::LazyUniqueInstanceLifeTraits<GameSettingsProvider>;
 
-  float screen_width_;
-  float screen_height_;
-  int   screen_depth_;
+  float       screen_width_;
+  float       screen_height_;
+  int         screen_depth_;
+  HINSTANCE   instance_;
 
   NO_CPY_CONSTRUCTORS(GameSettingsProvider);
 };
+
+typedef base::LazyUniqueInstance<GameSettingsProvider> Game_SettingsProvider;
 
 } // ns game_logic
 

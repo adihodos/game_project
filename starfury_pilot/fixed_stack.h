@@ -11,6 +11,10 @@ public :
   fixed_stack()
     : index_(0) {}
 
+  typedef T*                iterator;
+  typedef const T*          const_iterator;
+  typedef T                 value_type;
+
   void push(const T& element) {
     assert(index_ < maxsize);
     elements_[index_++] = element;
@@ -45,6 +49,22 @@ public :
 
   void clear() {
     index_ = 0;
+  }
+
+  iterator begin() {
+    return elements_;
+  }
+
+  iterator end() {
+    return elements_ + index_;
+  }
+
+  const_iterator begin() const {
+    return elements_;
+  }
+
+  const_iterator end() const {
+    return elements_ + index_;
   }
 
 private :

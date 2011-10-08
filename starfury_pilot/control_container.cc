@@ -7,12 +7,12 @@ game_ui::IScreenComponentContainer::IScreenComponentContainer()
 
 game_ui::IScreenComponentContainer::~IScreenComponentContainer() {}
 
-void game_ui::IScreenComponentContainer::add_child(Widget* child) {
-  children_.push_back(std::shared_ptr<Widget>(child));
+void game_ui::IScreenComponentContainer::add_child(Widget2* child) {
+  children_.push_back(std::shared_ptr<Widget2>(child));
 }
 
-void game_ui::IScreenComponentContainer::remove_child(Widget* child) {
-  children_.remove_if([child](std::shared_ptr<Widget>& child_ptr)
+void game_ui::IScreenComponentContainer::remove_child(Widget2* child) {
+  children_.remove_if([child](std::shared_ptr<Widget2>& child_ptr)
   { return child == child_ptr.get(); }
   );
 }

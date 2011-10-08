@@ -1,5 +1,6 @@
 #include "precompiled.h"
 #include "atexit_manager.h"
+#include "engine.h"
 #include "game_engine.h"
 #include "game_settings_provider.h"
 #include "lazy_unique_instance.h"
@@ -61,13 +62,19 @@ INT WINAPI wWinMain(
       return -1;
     }
 
-    if (!base::LazyUniqueInstance<GameEngine>::Get()->Initialize(
+    if (!game_logic::GameEngine_Handle::Get()->initialize()) {
+      OUT_DBG_MSG(L"Failed to initialize engine.");
+      ::MessageBoxW(nullptr, L"Error!", L"Failed to initialize!", MB_ICONERROR);
+    } else {
+      game_logic::GameEngine_Handle::Get()->app_main();
+    }
+    /*if (!base::LazyUniqueInstance<GameEngine>::Get()->Initialize(
         instance, settings_provider->get_screen_width(),
         settings_provider->get_screen_height())) {   
         ::MessageBoxW(nullptr, L"Error!", L"Failed to initialize!", MB_ICONERROR);
     } else {
       base::LazyUniqueInstance<GameEngine>::Get()->RunMainLoop();
-    }
+    }*/
   }
 
   return 0;

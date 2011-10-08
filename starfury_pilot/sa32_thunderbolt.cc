@@ -36,9 +36,9 @@ game_entity::SA32_Thunderbolt::SA32_Thunderbolt(
 }
 
 void game_entity::SA32_Thunderbolt::FirePlasmaGun(GameEngine* world) {
-  world->ProjectileFired(
-    new SA32_PlasmaBolt(position_ + gun_direction_, 
-                        gun_direction_ * 4.0f));
+  //world->ProjectileFired(
+  //  new SA32_PlasmaBolt(position_ + gun_direction_, 
+  //                      gun_direction_ * 4.0f));
 }
 
 void game_entity::SA32_Thunderbolt::FireRockets(
@@ -79,10 +79,10 @@ void game_entity::SA32_Thunderbolt::Draw(
 
   //
   // Draw ship's bitmap
-  ID2D1Bitmap* ship_texture(base::LazyUniqueInstance<GameResourceCache>::Get()->GetBitmapHandle(SA32_Thunderbolt::K_ResourceFileName);
-  assert(ship_texture);
-  r_render->GetRendererTarget()->DrawBitmap(ship_texture, dst);
-  r_render->GetRendererTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+  //ID2D1Bitmap* ship_texture(base::LazyUniqueInstance<GameResourceCache>::Get()->GetBitmapHandle(SA32_Thunderbolt::K_ResourceFileName);
+  //assert(ship_texture);
+  //r_render->GetRendererTarget()->DrawBitmap(ship_texture, dst);
+  //r_render->GetRendererTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
 void game_entity::SA32_Thunderbolt::Rotate(float amount) {

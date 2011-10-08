@@ -120,6 +120,33 @@
     <ClInclude Include="cgamescreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="widget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="keyboard_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mouse_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sys_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="screen_mgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="play_screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="drawable_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="precompiled.cc">
@@ -170,9 +197,6 @@
     <ClCompile Include="game_settings_provider.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game_screen.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="solidcolor_button.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -186,6 +210,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cgamescreen.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sys_event.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="screen_mgr.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="play_screen.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

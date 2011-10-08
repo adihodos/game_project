@@ -1,44 +1,23 @@
 #ifndef GAMESCREEN_H__
 #define GAMESCREEN_H__
 
-#include "control_container.h"
-#include "idrawable.h"
-#include "ikeyboardeventreceiver.h"
-#include "imouseeventreceiver.h"
+#include "drawable_object.h"
+#include "keyboard_event.h"
+#include "mouse_event.h"
 
 namespace game_ui {
 
-class Widget;
-class Screen_Manager;
-
-class IGameScreen : public IDrawable, 
-                    public IKeyboardEventReceiver, public IMouseEventReceiver, 
-                    public IScreenComponentContainer {
+class IGameScreen : public game_logic::I_DrawableObject, 
+                    public game_logic::IKeyboard_EventReceiver, 
+                    public game_logic::IMouse_EventReceiver {
 public :
-  IGameScreen(
-    Screen_Manager* screen_manager, 
-    const gfx::vector2D& position, 
-    float width, 
-    float height
-    );
+  IGameScreen() {}
 
-  virtual ~IGameScreen();
+  virtual ~IGameScreen() {}
 
-  void set_active();
+  virtual bool initialize() { return true; }
 
-  void set_inactive();
-
-  virtual bool initialize() = 0;
-protected :
-  void handle_focus_change(Widget* new_focused_object);
-
-  void focus_next_control();
-
-  gfx::vector2D     position_;
-  float             width_;
-  float             height_;
-  Screen_Manager*   screen_manager_;
-  Widget* focused_object_;
+  virtual void update(float /* delta */) {}  
 };
 
 } // ns game_ui

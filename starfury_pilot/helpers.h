@@ -2,12 +2,29 @@
 
 #include <cstdarg>
 #include <d2d1.h>
+#include <limits>
 #include <Windows.h>
 #include <wincodec.h>
 
 namespace utility {
 
 const float K_PI = 3.14159265f;
+
+template<typename Ty>
+struct Ty_BitCount {
+  static const int kBitsInType = CHAR_BIT * sizeof(Ty);
+};
+
+template<typename Ty>
+inline
+bool
+extract_bit(
+  Ty val,
+  int pos
+)
+{
+  return val & (((~0) >> Ty_BitCount<Ty>::kBitsInType - pos) & (1 << pos));
+}
 
 inline float DegreesToRadians(float degrees) {
   return (degrees * K_PI) / 180.0f;
@@ -95,8 +112,29 @@ struct COMObject_Deleter {
 }
 
 #if defined(_DEBUG)
+
 #ifndef OUT_DBG_MSG
 #define OUT_DBG_MSG(fmtspec, ...)   \
-  utility::OutputMessageToDebugger(fmtspec L"\n", __VA_ARGS__)
-#endif
-#endif
+  utility::OutputMessageToDebugger(fmtspec L"\n", ##__VA_ARGS__)
+#endif /* !OUT_DBG_MSG */
+
+#ifndef FUNC_FAILED_HRESULT
+#define FUNC_FAILED_HRESULT(funcname, ret_val)  \
+  utility::OutputMessageToDebugger(L"Functions %s failed, HRESULT = %#08x", \
+                                   L#funcname, ret_val)
+#endif /* !FUNC_FAILED_HRESULT */
+
+#ifndef FUNC_FAILED_WINAPI
+#define FUNC_FAILED_WINAPI(fun_name) \
+  utility::OutputMessageToDebugger(L"Function %s failed, error = %d", L#fun_name, ::GetLastError())
+#endif /* !FUNC_FAILED_WINAPI */
+
+#else /* _DEBUG */
+
+#define OUT_DBG_MSG(fmtspec, ...) static_cast<void>(0)
+
+#define FUNC_FAILED_HRESULT(funcname, ret_val)  static_cast<void>(0)
+
+#define FUNC_FAILED_WINAPI(fun_name) static_cast<void>(0)
+
+#endif /* !_DEBUG */

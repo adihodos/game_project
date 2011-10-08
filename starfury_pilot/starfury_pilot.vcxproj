@@ -83,6 +83,8 @@
     <ClInclude Include="cgamescreen.h" />
     <ClInclude Include="control_container.h" />
     <ClInclude Include="d2drenderer.h" />
+    <ClInclude Include="drawable_object.h" />
+    <ClInclude Include="engine.h" />
     <ClInclude Include="fixed_stack.h" />
     <ClInclude Include="game_engine.h" />
     <ClInclude Include="game_resourcecache.h" />
@@ -97,10 +99,14 @@
     <ClInclude Include="imouseeventreceiver.h" />
     <ClInclude Include="iprojectile.h" />
     <ClInclude Include="ispaceship.h" />
+    <ClInclude Include="keyboard_event.h" />
     <ClInclude Include="lazy_unique_instance.h" />
     <ClInclude Include="main_screen.h" />
     <ClInclude Include="meteor.h" />
+    <ClInclude Include="mouse_event.h" />
+    <ClInclude Include="play_screen.h" />
     <ClInclude Include="precompiled.h" />
+    <ClInclude Include="renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resultwrapper.h" />
     <ClInclude Include="sa32_plasmabolt.h" />
@@ -110,8 +116,11 @@
     <ClInclude Include="scoped_pointer.h" />
     <ClInclude Include="screen_component.h" />
     <ClInclude Include="screen_manager.h" />
+    <ClInclude Include="screen_mgr.h" />
     <ClInclude Include="solidcolor_button.h" />
+    <ClInclude Include="sys_event.h" />
     <ClInclude Include="ui_factory.h" />
+    <ClInclude Include="widget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="atexit_manager.cc" />
@@ -119,9 +128,9 @@
     <ClCompile Include="cgamescreen.cc" />
     <ClCompile Include="control_container.cc" />
     <ClCompile Include="d2drender.cc" />
+    <ClCompile Include="engine.cc" />
     <ClCompile Include="game_engine.cc" />
     <ClCompile Include="game_resourcecache.cc" />
-    <ClCompile Include="game_screen.cc" />
     <ClCompile Include="game_settings_provider.cc" />
     <ClCompile Include="hashfunc.cc" />
     <ClCompile Include="helpers.cc" />
@@ -129,15 +138,19 @@
     <ClCompile Include="main.cc" />
     <ClCompile Include="main_screen.cc" />
     <ClCompile Include="meteor.cc" />
+    <ClCompile Include="play_screen.cc" />
     <ClCompile Include="precompiled.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="renderer.cc" />
     <ClCompile Include="sa32_plasmabolt.cc" />
     <ClCompile Include="sa32_rocket.cc" />
     <ClCompile Include="sa32_thunderbolt.cc" />
     <ClCompile Include="screen_component.cc" />
     <ClCompile Include="screen_manager.cc" />
+    <ClCompile Include="screen_mgr.cc" />
     <ClCompile Include="solidcolor_button.cc" />
+    <ClCompile Include="sys_event.cc" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="starfury_pilot.rc" />

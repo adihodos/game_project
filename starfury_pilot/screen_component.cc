@@ -1,10 +1,10 @@
 #include "precompiled.h"
 #include "screen_component.h"
 
-game_ui::Widget::Widget( 
+game_ui::Widget2::Widget2( 
   int identifier,
   const gfx::vector2D& position, float width, float height, 
-  Widget* parent /* = nullptr */ 
+  Widget2* parent /* = nullptr */ 
   ):  IDrawable(), IKeyboardEventReceiver(), IMouseEventReceiver(),
       identifier_(identifier), position_(position), width_(width), 
       height_(height), parent_(parent), 
@@ -12,4 +12,4 @@ game_ui::Widget::Widget(
 {
 }
 
-game_ui::Widget::~Widget() {}
+game_ui::Widget2::~Widget2() {}

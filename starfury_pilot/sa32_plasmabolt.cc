@@ -36,12 +36,12 @@ void game_entity::SA32_PlasmaBolt::Draw(
 {
   D2D1_ELLIPSE bolt_geometry(D2D1::Ellipse(pos_, size_.x_ / 2, size_.y_ / 2));
 
-  ID2D1BitmapBrush* bolt_texture(base::LazyUniqueInstance<GameResourceCache>::Get()->GetBitmapBrushHandle(SA32_PlasmaBolt::K_ResourceFileName);
-  assert(bolt_texture);
+  //ID2D1BitmapBrush* bolt_texture(base::LazyUniqueInstance<GameResourceCache>::Get()->GetBitmapBrushHandle(SA32_PlasmaBolt::K_ResourceFileName);
+  //assert(bolt_texture);
   //
   // This is needed so that the brush aligns with the ellipse.
-  bolt_texture->SetTransform(
+  /*bolt_texture->SetTransform(
     D2D1::Matrix3x2F::Translation(pos_.x_ - bolt_geometry.radiusX / 2,
                                   pos_.y_ - bolt_geometry.radiusY / 2));
-  r_render->GetRendererTarget()->FillEllipse(bolt_geometry, bolt_texture);
+  r_render->GetRendererTarget()->FillEllipse(bolt_geometry, bolt_texture);*/
 }

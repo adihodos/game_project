@@ -9,16 +9,16 @@
 
 namespace game_ui {
 
-class Widget : 
+class Widget2 : 
   public IDrawable, public IKeyboardEventReceiver, public IMouseEventReceiver {
 public :
-  Widget(
+  Widget2(
     int identifier,
     const gfx::vector2D& position, float width, float height, 
-    Widget* parent = nullptr
+    Widget2* parent = nullptr
     );
 
-  virtual ~Widget();
+  virtual ~Widget2();
 
   int get_id() const {
     return identifier_;
@@ -48,11 +48,11 @@ public :
     position_ = position;
   }
 
-  Widget* get_parent() const {
+  Widget2* get_parent() const {
     return parent_;
   }
 
-  void set_parent(Widget* parent) {
+  void set_parent(Widget2* parent) {
     parent_ = parent;
   }
 
@@ -90,19 +90,19 @@ public :
   virtual void on_depressed() { pressed_ = false;}
 
 protected :
-  virtual void on_child_activated(Widget* sender) = 0;
+  virtual void on_child_activated(Widget2* sender) = 0;
 
   const int identifier_;
   gfx::vector2D position_;
   float width_;
   float height_;
-  Widget* parent_;
+  Widget2* parent_;
   bool  pressed_;
   bool  hovered_;
   bool  enabled_;
   bool  focus_;
 
-  NO_CPY_CONSTRUCTORS(Widget);
+  NO_CPY_CONSTRUCTORS(Widget2);
 };
 
 } // ns game_ui
