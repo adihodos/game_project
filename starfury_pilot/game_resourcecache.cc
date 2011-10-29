@@ -2,7 +2,7 @@
 #include "game_resourcecache.h"
 #include "helpers.h"
 
-GameResourceCache::GameResourceCache()
+game_core::resource_cache::resource_cache()
   : rtarget_(), 
     imgfactory_(),
     writefactory_(),
@@ -11,11 +11,15 @@ GameResourceCache::GameResourceCache()
     bitmapbrush_cache_(),
     font_cache_() {}
 
-GameResourceCache::~GameResourceCache() {
-  DiscardAllCachedResources();
+game_core::resource_cache::~resource_cache() {
+  discard_cached_resourcess();
 }
 
-bool GameResourceCache::Initialize(ID2D1HwndRenderTarget* rtarget)  {
+bool 
+game_core::resource_cache::initialize(
+  ID2D1HwndRenderTarget* rtarget
+  )  
+{
   assert(rtarget_ == nullptr);
   rtarget_ = rtarget;
 
@@ -39,7 +43,11 @@ bool GameResourceCache::Initialize(ID2D1HwndRenderTarget* rtarget)  {
   return SUCCEEDED(ret_code);
 }
 
-ID2D1Bitmap* GameResourceCache::GetBitmapHandle(const wchar_t* rsrcname) {
+ID2D1Bitmap* 
+game_core::resource_cache::get_bitmap(
+  const wchar_t* rsrcname
+  ) 
+{
   auto itdata = bitmap_cache_.find(rsrcname);
   if (itdata != bitmap_cache_.end())
     return itdata->second;
@@ -55,11 +63,12 @@ ID2D1Bitmap* GameResourceCache::GetBitmapHandle(const wchar_t* rsrcname) {
   if (FAILED(ret_code))
     return nullptr;
 
-  bitmap_cache_.insert(GRC_BitmapCache::value_type(rsrcname, bitmap));
+  bitmap_cache_.insert(bitmap_cache_t::value_type(rsrcname, bitmap));
   return bitmap;
 }
 
-ID2D1SolidColorBrush* GameResourceCache::GetSolidColorBrushHandle(
+ID2D1SolidColorBrush*
+game_core::resource_cache::get_solid_color_brush(
   const D2D1::ColorF& color
   )
 {
@@ -72,11 +81,17 @@ ID2D1SolidColorBrush* GameResourceCache::GetSolidColorBrushHandle(
   if (FAILED(ret_code))
     return nullptr;
 
-  solidcolorbrush_cache_.insert(GRC_SCBrushCache::value_type(color, brush));
+  solidcolorbrush_cache_.insert(solidcolor_brush_cache_t::value_type(color, brush));
   return brush;
 }
 
-ID2D1BitmapBrush* GameResourceCache::GetBitmapBrushHandle(const wchar_t* bmpname) {
+ID2D1BitmapBrush* 
+game_core::resource_cache::get_bitmap_brush(
+  const wchar_t* bmpname
+  ) 
+{
+  assert(bmpname);
+
   auto itdata = bitmapbrush_cache_.find(bmpname);
   if (itdata != bitmapbrush_cache_.end())
     return itdata->second;
@@ -99,29 +114,32 @@ ID2D1BitmapBrush* GameResourceCache::GetBitmapBrushHandle(const wchar_t* bmpname
   if (FAILED(ret_code))
     return nullptr;
 
-  bitmapbrush_cache_.insert(GRC_BBrushCache::value_type(bmpname, newbrush));
+  bitmapbrush_cache_.insert(bitmap_brush_cache_t::value_type(bmpname, newbrush));
   return newbrush;
 }
 
 IDWriteTextFormat*
-GameResourceCache::GetFontHandle(const game_ui::GameFontData& fdata) {
-  using game_ui::GameFontData;
+game_core::resource_cache::get_font(
+  const game_core::game_font& fdata
+  ) 
+{
+  using game_core::game_font;
 
   auto fnt_itr = font_cache_.find(fdata);
   if (fnt_itr != font_cache_.end())
     return fnt_itr->second.get();
 
   DWRITE_FONT_WEIGHT fweight;
-  switch (fdata.GetFontWeight()) {
-  case GameFontData::GFD_FW_HEAVY :
+  switch (fdata.get_font_weight()) {
+  case game_font::GFD_FW_HEAVY :
     fweight = DWRITE_FONT_WEIGHT_HEAVY;
     break;
 
-  case GameFontData::GFD_FW_MEDIUM :
+  case game_font::GFD_FW_MEDIUM :
     fweight = DWRITE_FONT_WEIGHT_MEDIUM;
     break;
 
-  case GameFontData::GFD_FW_LIGHT :
+  case game_font::GFD_FW_LIGHT :
     fweight = DWRITE_FONT_WEIGHT_LIGHT;
     break;
 
@@ -131,12 +149,12 @@ GameResourceCache::GetFontHandle(const game_ui::GameFontData& fdata) {
   }
 
   DWRITE_FONT_STYLE fstyle;
-  switch (fdata.GetFontStyle()) {
-  case GameFontData::GFD_FS_SITALIC :
+  switch (fdata.get_font_style()) {
+  case game_font::GFD_FS_SITALIC :
     fstyle = DWRITE_FONT_STYLE_ITALIC;
     break;
 
-  case GameFontData::GFD_FS_OBLIQUE :
+  case game_font::GFD_FS_OBLIQUE :
     fstyle = DWRITE_FONT_STYLE_OBLIQUE;
     break;
 
@@ -147,40 +165,41 @@ GameResourceCache::GetFontHandle(const game_ui::GameFontData& fdata) {
 
   IDWriteTextFormat* textfmt;
   HRESULT ret_code = writefactory_->CreateTextFormat(
-    fdata.GetFontName().c_str(), 
+    fdata.get_font_name().c_str(), 
     nullptr, // use default font collection
     fweight,
     fstyle,
     DWRITE_FONT_STRETCH_NORMAL,
-    fdata.GetFontSize(),
+    fdata.get_font_size(),
     L"en-us",
     &textfmt);
 
   if (FAILED(ret_code))
     return nullptr;
 
-  font_cache_.insert(GRC_FontCache::value_type(
+  font_cache_.insert(font_cache_t::value_type(
     fdata, 
     std::shared_ptr<IDWriteTextFormat>(
       textfmt, utility::COMObject_Deleter<IDWriteTextFormat>())));
   return textfmt;
 }
 
-void GameResourceCache::DiscardAllCachedResources() {
+void 
+game_core::resource_cache::discard_cached_resourcess() {
   std::for_each(bitmap_cache_.begin(), bitmap_cache_.end(),
-    [](GRC_BitmapCache::value_type& valtype_itr) {
+    [](bitmap_cache_t::value_type& valtype_itr) {
       if (valtype_itr.second)
         valtype_itr.second->Release();
   });
 
   std::for_each(solidcolorbrush_cache_.begin(), solidcolorbrush_cache_.end(),
-    [](GRC_SCBrushCache::value_type& valtype_itr) {
+    [](solidcolor_brush_cache_t::value_type& valtype_itr) {
       if (valtype_itr.second)
         valtype_itr.second->Release();
   });
 
   std::for_each(bitmapbrush_cache_.begin(), bitmapbrush_cache_.end(),
-    [](GRC_BBrushCache::value_type& valtype_itr) {
+    [](bitmap_brush_cache_t::value_type& valtype_itr) {
       if (valtype_itr.second)
         valtype_itr.second->Release();
   });
@@ -190,15 +209,16 @@ void GameResourceCache::DiscardAllCachedResources() {
   solidcolorbrush_cache_.clear();
 }
 
-bool GameResourceCache::get_texture_size( 
+bool 
+game_core::resource_cache::get_texture_size( 
   const wchar_t* resource_filename, 
-  gfx::vector2D* vec_size 
+  gfx::vector2* vec_size 
   )
 {
   assert(resource_filename);
   assert(vec_size);
 
-  ID2D1Bitmap* bitmap(GetBitmapHandle(resource_filename));
+  ID2D1Bitmap* bitmap(get_bitmap(resource_filename));
   if (!bitmap)
     return false;
 

@@ -5,23 +5,45 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6822869A-DCD5-41BB-9EDD-3D353DD7C661}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>starfury_pilot</RootNamespace>
+    <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and $(VisualStudioVersion) == ''">$(VCTargetsPath11)</VCTargetsPath>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -33,17 +55,35 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files\Microsoft SDKs\Windows\v7.1\Include;C:\opt\libs\gfx_lib\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib\x64;C:\opt\libs\gfx_lib\lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\opt\libs\gfx_lib\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\opt\libs\gfx_lib\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\opt\libs\gfx_lib\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\opt\libs\gfx_lib\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\opt\libs\gfx_lib\lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\opt\libs\gfx_lib\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\opt\libs\gfx_lib\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -56,7 +96,22 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>winmm.lib;d2d1.lib;WindowsCodecs.lib;dwrite.lib;ole32.lib;gfx_lib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;d2d1.lib;WindowsCodecs.lib;dwrite.lib;ole32.lib;gfx_lib_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;D2D_SUPPORT__;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>precompiled.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/wd 4996 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>winmm.lib;d2d1.lib;WindowsCodecs.lib;dwrite.lib;ole32.lib;gfx_lib_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -74,83 +129,64 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>gfx_lib.lib;d2d1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>gfx_lib.lib;d2d1.lib;winmm.lib;WindowsCodecs.lib;dwrite.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="atexit_manager.h" />
     <ClInclude Include="basetypes.h" />
-    <ClInclude Include="button_base.h" />
-    <ClInclude Include="cgamescreen.h" />
-    <ClInclude Include="control_container.h" />
-    <ClInclude Include="d2drenderer.h" />
-    <ClInclude Include="drawable_object.h" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="event_queue.h" />
     <ClInclude Include="fixed_stack.h" />
-    <ClInclude Include="game_engine.h" />
     <ClInclude Include="game_resourcecache.h" />
-    <ClInclude Include="game_screen.h" />
+    <ClInclude Include="game_session.h" />
     <ClInclude Include="game_settings_provider.h" />
     <ClInclude Include="hashfunc.h" />
     <ClInclude Include="helpers.h" />
-    <ClInclude Include="icollidable.h" />
-    <ClInclude Include="idrawable.h" />
     <ClInclude Include="gamefont.h" />
-    <ClInclude Include="ikeyboardeventreceiver.h" />
-    <ClInclude Include="imouseeventreceiver.h" />
-    <ClInclude Include="iprojectile.h" />
-    <ClInclude Include="ispaceship.h" />
     <ClInclude Include="keyboard_event.h" />
     <ClInclude Include="lazy_unique_instance.h" />
-    <ClInclude Include="main_screen.h" />
-    <ClInclude Include="meteor.h" />
     <ClInclude Include="mouse_event.h" />
-    <ClInclude Include="play_screen.h" />
     <ClInclude Include="precompiled.h" />
-    <ClInclude Include="renderer.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="resultwrapper.h" />
-    <ClInclude Include="sa32_plasmabolt.h" />
-    <ClInclude Include="sa32_rocket.h" />
     <ClInclude Include="sa32_thunderbolt.h" />
     <ClInclude Include="scoped_handle.h" />
     <ClInclude Include="scoped_pointer.h" />
-    <ClInclude Include="screen_component.h" />
-    <ClInclude Include="screen_manager.h" />
-    <ClInclude Include="screen_mgr.h" />
-    <ClInclude Include="solidcolor_button.h" />
-    <ClInclude Include="sys_event.h" />
-    <ClInclude Include="ui_factory.h" />
-    <ClInclude Include="widget.h" />
+    <ClInclude Include="timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="atexit_manager.cc" />
-    <ClCompile Include="button_base.cc" />
-    <ClCompile Include="cgamescreen.cc" />
-    <ClCompile Include="control_container.cc" />
-    <ClCompile Include="d2drender.cc" />
     <ClCompile Include="engine.cc" />
-    <ClCompile Include="game_engine.cc" />
+    <ClCompile Include="event_queue.cc" />
     <ClCompile Include="game_resourcecache.cc" />
+    <ClCompile Include="game_session.cc" />
     <ClCompile Include="game_settings_provider.cc" />
     <ClCompile Include="hashfunc.cc" />
     <ClCompile Include="helpers.cc" />
-    <ClCompile Include="icollidable.cc" />
     <ClCompile Include="main.cc" />
-    <ClCompile Include="main_screen.cc" />
-    <ClCompile Include="meteor.cc" />
-    <ClCompile Include="play_screen.cc" />
     <ClCompile Include="precompiled.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="renderer.cc" />
-    <ClCompile Include="sa32_plasmabolt.cc" />
-    <ClCompile Include="sa32_rocket.cc" />
     <ClCompile Include="sa32_thunderbolt.cc" />
-    <ClCompile Include="screen_component.cc" />
-    <ClCompile Include="screen_manager.cc" />
-    <ClCompile Include="screen_mgr.cc" />
-    <ClCompile Include="solidcolor_button.cc" />
-    <ClCompile Include="sys_event.cc" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="starfury_pilot.rc" />

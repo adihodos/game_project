@@ -7,7 +7,7 @@
 #include "keyboard_event.h"
 #include "mouse_event.h"
 
-namespace game_logic {
+namespace game_core {
 
 template<typename T, typename U>
 struct bigger_type {

@@ -56,7 +56,7 @@ public :
     colors_[SCB_Text] = D2D1::ColorF(color);
   }
 
-  void set_font(const GameFontData& font) { font_ = font; }
+  void set_font(const game_font& font) { font_ = font; }
 
   void Draw(Direct2DRenderer* renderer);
 
@@ -90,7 +90,7 @@ private :
   std::wstring  text_;
   float         frame_width_;
   D2D1_COLOR_F  colors_[6];
-  GameFontData  font_;
+  game_font  font_;
 };
 
 } // ns game_ui

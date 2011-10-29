@@ -1,7 +1,7 @@
 #ifndef DRAWABLE_OBJECT_H__
 #define DRAWABLE_OBJECT_H__
 
-namespace game_logic {
+namespace game_core {
 
 class I_DrawableObject {
 public :

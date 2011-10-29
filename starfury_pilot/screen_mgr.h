@@ -10,7 +10,7 @@ namespace game_ui {
 class IGameScreen;
 }
 
-namespace game_logic {
+namespace game_core {
 
 class screen_manager : public base::LazyUniqueInstanceLifeTraits<screen_manager> {
 public :

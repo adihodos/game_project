@@ -1,7 +1,7 @@
 #ifndef MOUSE_EVENT_H__
 #define MOUSE_EVENT_H__
 
-namespace game_logic {
+namespace game_core {
 
 class MouseEvent_Args {
 public :
@@ -113,5 +113,24 @@ public :
 };
 
 } // namespace game_logic
+
+namespace game_core {
+
+class interface_mouse_event_receiver {
+public :
+  virtual ~interface_mouse_event_receiver() {}
+
+  virtual bool left_button_down(int x, int y) = 0;
+
+  virtual bool left_button_up(int x, int y) = 0;
+
+  virtual bool right_button_down(int x, int y) = 0;
+
+  virtual bool right_button_up(int x, int y) = 0;
+
+  virtual bool mouse_moved(int x, int y) = 0;
+};
+
+} // namespace game_core
 
 #endif // !MOUSE_EVENT_H__

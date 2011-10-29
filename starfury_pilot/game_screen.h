@@ -7,9 +7,9 @@
 
 namespace game_ui {
 
-class IGameScreen : public game_logic::I_DrawableObject, 
-                    public game_logic::IKeyboard_EventReceiver, 
-                    public game_logic::IMouse_EventReceiver {
+class IGameScreen : public game_core::I_DrawableObject, 
+                    public game_core::IKeyboard_EventReceiver, 
+                    public game_core::IMouse_EventReceiver {
 public :
   IGameScreen() {}
 

@@ -2,11 +2,13 @@
 #include "game_settings_provider.h"
 #include "helpers.h"
 
-game_logic::GameSettingsProvider::GameSettingsProvider() {}
+game_core::settings_provider::settings_provider() {}
 
-game_logic::GameSettingsProvider::~GameSettingsProvider() {}
+game_core::settings_provider::~settings_provider() {}
 
-bool game_logic::GameSettingsProvider::initialize() {
+bool game_core::settings_provider::initialize(HINSTANCE instance) {
+  instance_ = instance;
+
   DEVMODEW dinfo;
   if (!::EnumDisplaySettingsW(nullptr, ENUM_CURRENT_SETTINGS, &dinfo))
     return false;

@@ -1,7 +1,7 @@
 #ifndef KEYBOARD_EVENT_H__
 #define KEYBOARD_EVENT_H__
 
-namespace game_logic {
+namespace game_core {
 
 class KeyEvent_Args {
 public :
@@ -22,7 +22,7 @@ public :
     if (l_param & kPreviouslyDownFlag)
       statef |= kStateFlags_WasDown;
 
-    return KeyEvent_Args(w_param, repeat_cnt, statef);
+    return KeyEvent_Args(static_cast<int>(w_param), repeat_cnt, statef);
   }
 
   KeyEvent_Args(int vcode, int rpt, unsigned state_flags)
@@ -50,5 +50,18 @@ public :
 };
 
 } // namespace game_logic
+
+namespace game_core {
+
+class interface_key_event_receiver {
+public :
+  virtual ~interface_key_event_receiver() {}
+
+  virtual bool key_down(int code) = 0;
+
+  virtual bool key_up(int code) = 0;
+};
+
+}
 
 #endif // !KEYBOARD_EVENT_H__

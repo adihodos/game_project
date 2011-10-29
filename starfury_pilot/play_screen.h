@@ -11,7 +11,7 @@ namespace gfx {
 class vector2D;
 }
 
-namespace game_logic {
+namespace game_core {
 
 class Play_Screen : public game_ui::IGameScreen {
 public :

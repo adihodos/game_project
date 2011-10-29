@@ -2,49 +2,47 @@
 #define SA32_THUNDERBOLT_H__
 
 #include <d2d1.h>
-#include <gfx/vector2d.h>
+#include <gfx/vector2.h>
 #include "basetypes.h"
-#include "ispaceship.h"
 #include "scoped_pointer.h"
 
-class GameEngine;
-class Direct2DRenderer;
+namespace game_core {
 
-namespace game_entity {
-
-class SA32_Thunderbolt : public ISpaceShip {
+class sa32_thunderbolt {
 public :
-  SA32_Thunderbolt(const gfx::vector2D& pos, 
-                   int hp = 100, 
-                   int lives = 1);
+  sa32_thunderbolt(int hp = 100);
 
-  void Rotate(float amount);
+  void rotate(float amount);
 
-  void FireRockets(GameEngine* world);
+  void move(int direction);
 
-  void FirePlasmaGun(GameEngine* world);
+  void draw();
 
-  void MoveX(float amount = 0.0f);
+  bool initialize();
 
-  void BlowUp() {
-    OutputDebugStringW(__FUNCTIONW__ L" is not implmented!\n");
-    assert(0);
+  void set_position(const gfx::vector2& pos) {
+    position_ = pos;
   }
 
-  void Draw(Direct2DRenderer* r_render);
+  const gfx::vector2& get_position() const {
+    return position_;
+  }
+
+  const gfx::vector2& get_ship_geometry() const {
+    return geometry_;
+  }
 
 private :
-  static const wchar_t* const                 K_ResourceFileName;
-  static const float                          K_VelocityY;
+  //static const float                          K_VelocityY;
+
   int                                         hp_;
-  gfx::vector2D                               position_;
-  gfx::vector2D                               gun_direction_;
-  D2D1_POINT_2F                               rocket_left_;
-  D2D1_POINT_2F                               rocket_right_;
-  gfx::vector2D                               ship_geometry_;
+  gfx::vector2                                position_;
+  gfx::vector2                                gun_direction_;
+  gfx::vector2                                geometry_;
   float                                       rotate_angle_;
-  bool                                        leftrpod_;
-  NO_CPY_CONSTRUCTORS(SA32_Thunderbolt);
+  ID2D1Bitmap*                                ship_texture_;
+
+  NO_CPY_CONSTRUCTORS(sa32_thunderbolt);
 };
 
 } // ns game_entity

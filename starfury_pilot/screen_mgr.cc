@@ -4,9 +4,9 @@
 #include "play_screen.h"
 #include "screen_mgr.h"
 
-game_logic::screen_manager::screen_manager() {}
+game_core::screen_manager::screen_manager() {}
 
-game_logic::screen_manager::~screen_manager() {
+game_core::screen_manager::~screen_manager() {
   std::for_each(
     screens_.begin(), screens_.end(), [](game_ui::IGameScreen* gsi) -> void {
       delete gsi;
@@ -14,7 +14,7 @@ game_logic::screen_manager::~screen_manager() {
 }
 
 void 
-game_logic::screen_manager::pop_screen() {
+game_core::screen_manager::pop_screen() {
   assert(!screens_.empty());
   delete screens_.top();
   screens_.pop();
@@ -25,7 +25,7 @@ game_logic::screen_manager::pop_screen() {
 }
 
 void
-game_logic::screen_manager::push_screen(
+game_core::screen_manager::push_screen(
   game_ui::IGameScreen* gsi
   )
 {
@@ -35,7 +35,7 @@ game_logic::screen_manager::push_screen(
 }
 
 bool
-game_logic::screen_manager::initialize() {
+game_core::screen_manager::initialize() {
   scoped_pointer<game_ui::IGameScreen> play_screen(new Play_Screen());
   if (!play_screen->initialize())
     return false;

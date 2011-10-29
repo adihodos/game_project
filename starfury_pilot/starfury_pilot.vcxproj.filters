@@ -27,55 +27,13 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="game_engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ispaceship.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sa32_thunderbolt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="iprojectile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sa32_rocket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="d2drenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="helpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="idrawable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="icollidable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="meteor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sa32_plasmabolt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resultwrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="basetypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ikeyboardeventreceiver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imouseeventreceiver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="fixed_stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="screen_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game_resourcecache.h">
@@ -90,37 +48,10 @@
     <ClInclude Include="hashfunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui_factory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gamefont.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="screen_component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="game_screen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="main_screen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="game_settings_provider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="solidcolor_button.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="button_base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="control_container.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cgamescreen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="widget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="keyboard_event.h">
@@ -129,22 +60,19 @@
     <ClInclude Include="mouse_event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sys_event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="renderer.h">
+    <ClInclude Include="timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="screen_mgr.h">
+    <ClInclude Include="game_session.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="play_screen.h">
+    <ClInclude Include="event_queue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="drawable_object.h">
+    <ClInclude Include="sa32_thunderbolt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -155,31 +83,7 @@
     <ClCompile Include="main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game_engine.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sa32_thunderbolt.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sa32_rocket.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="d2drender.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="helpers.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="icollidable.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="meteor.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sa32_plasmabolt.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="screen_manager.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game_resourcecache.cc">
@@ -191,40 +95,19 @@
     <ClCompile Include="hashfunc.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main_screen.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="game_settings_provider.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="solidcolor_button.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="control_container.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="button_base.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="screen_component.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cgamescreen.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sys_event.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="engine.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="renderer.cc">
+    <ClCompile Include="game_session.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="screen_mgr.cc">
+    <ClCompile Include="event_queue.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="play_screen.cc">
+    <ClCompile Include="sa32_thunderbolt.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

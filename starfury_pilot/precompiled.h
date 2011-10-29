@@ -18,10 +18,11 @@
 #include <string>
 #include <vector>
 
-#include <gfx/circle.h>
-#include <gfx/vector2d.h>
-#include <gfx/matrix3x3.h>
-#include <gfx/misc.h>
+//#include <gfx/circle.h>
+#include <gfx/ellipse.h>
+#include <gfx/matrix3X3.h>
+#include <gfx/rectangle.h>
+#include <gfx/vector2.h>
 
 #if defined(NTDDI_VERSION)
 #undef NTDDI_VERSION

@@ -27,6 +27,14 @@ public :
     return r_imgfactory_.get();
   }
 
+  float GetRenderTargetWidth() const {
+    return r_width_;
+  }
+
+  float GetRenderTargetHeight() const {
+    return r_height_;
+  }
+
 private :
   bool CreateDeviceIndependentResources();
 

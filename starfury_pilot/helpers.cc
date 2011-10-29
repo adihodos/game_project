@@ -175,6 +175,26 @@ utility::OutputMessageToDebugger(
   ::OutputDebugStringW(msgbuff);
 }
 
+void 
+utility::output_formatted_debug_string(
+  const wchar_t* file,
+  int line,
+  const wchar_t* fmt,
+  ...
+  )
+{
+  wchar_t buff_msg[2048];
+  _snwprintf_s(buff_msg, _countof(buff_msg) - 1, L"\n[%s, %d]\n", file, line);
+  ::OutputDebugStringW(buff_msg);
+
+  va_list args_ptr;
+  va_start(args_ptr, fmt);
+  _vsnwprintf_s(buff_msg, _countof(buff_msg) - 1, fmt, args_ptr);
+  va_end(args_ptr);
+
+  ::OutputDebugStringW(buff_msg);
+}
+
 HRESULT
 utility::CreateRadialGradientBrush(
   ID2D1RenderTarget* r_target,
@@ -214,6 +234,7 @@ utility::GetApplicationBaseDirectory(
   assert(dst_dir);
   dst_dir->clear();
 
+  /*
   wchar_t namebuff[512];
 
   DWORD buff_size = ::GetModuleFileNameW(nullptr, namebuff, _countof(namebuff));
@@ -225,9 +246,10 @@ utility::GetApplicationBaseDirectory(
   while (itr > namebuff && *itr != L'\\') {
     *itr = 0;
     --itr;
-  }
+  }*/
 
-  dst_dir->assign(namebuff);
+  const wchar_t* const kBaseDirectory = L"C:\\games\\starfury_pilot";
+  dst_dir->assign(kBaseDirectory);
   return true;
 }
 
@@ -241,7 +263,7 @@ utility::GetApplicationResourceDirectory() {
   return dirpath;
 }
 
-bool utility::GetScreenSize(SIZE* dim) {
+bool utility::get_screen_size(SIZE* dim) {
   assert(dim != nullptr);
 
   DEVMODEW dinfo;

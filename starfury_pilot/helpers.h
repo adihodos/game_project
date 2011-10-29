@@ -1,5 +1,6 @@
 #pragma once
 
+#include <intrin.h>
 #include <cstdarg>
 #include <d2d1.h>
 #include <limits>
@@ -56,6 +57,14 @@ OutputMessageToDebugger(
   ...
   );
 
+void 
+output_formatted_debug_string(
+  const wchar_t* file,
+  int line,
+  const wchar_t* fmt,
+  ...
+  );
+
 HRESULT 
 CreateRadialGradientBrush(
   ID2D1RenderTarget* r_target,
@@ -74,7 +83,7 @@ std::wstring
 GetApplicationResourceDirectory();
 
 bool
-GetScreenSize(
+get_screen_size(
   SIZE* dim
   );
 
@@ -109,7 +118,39 @@ struct COMObject_Deleter {
   }
 };
 
-}
+} // namespace utility
+
+#ifndef WIDEN2
+#define WIDEN2(x) L ## x
+#endif
+
+#ifndef WIDEN_STR
+#define WIDEN_STR(x) WIDEN2(x)
+#endif
+
+#ifndef __WFILE__
+#define __WFILE__ WIDEN_STR(__FILE__)
+#endif
+
+#ifndef DISABLE_WARNING_BLOCK_BEGIN
+#define DISABLE_WARNING_BLOCK_BEGIN(warning_id)  \
+  __pragma(warning(push)) \
+  __pragma(warning(disable : warning_id))
+#endif
+
+#ifndef DISABLE_WARNING_BLOCK_END
+#define DISABLE_WARNING_BLOCK_END(warning_id) \
+  __pragma(warning(pop))
+#endif
+
+#ifndef BREAK_INTO_DEBUGGER
+#define BREAK_INTO_DEBUGGER() \
+  do {                        \
+    DISABLE_WARNING_BLOCK_BEGIN(4127) \
+    __debugbreak();           \
+  } while (0);                \
+  DISABLE_WARNING_BLOCK_END(4127)
+#endif
 
 #if defined(_DEBUG)
 
@@ -129,6 +170,41 @@ struct COMObject_Deleter {
   utility::OutputMessageToDebugger(L"Function %s failed, error = %d", L#fun_name, ::GetLastError())
 #endif /* !FUNC_FAILED_WINAPI */
 
+#ifndef ERR_WINAPI
+#define ERR_WINAPI(func)  \
+  do {                    \
+    OutputFormattedDebugString(__WFILE__, __LINE__, \
+                               L"Function %s failed, error %d", \
+                               L#func, ::GetLastError()); \
+  } while (0)
+#endif
+
+#ifndef TRACE_D2DCALL
+#define TRACE_D2DCALL(ret_code_ptr, call_and_args)  \
+  do {                                              \
+    *(ret_code_ptr) = (call_and_args);              \
+    if (FAILED(*(ret_code_ptr))) {                  \
+        utility::output_formatted_debug_string(     \
+          __WFILE__, __LINE__,                      \
+          L"Call %s failed, HRESULT %#08x",         \
+          L#call_and_args,                          \
+          *(ret_code_ptr));                         \
+    }                                               \
+    DISABLE_WARNING_BLOCK_BEGIN(4127)               \
+  } while (0);                                      \
+  DISABLE_WARNING_BLOCK_END(4127)
+#endif
+
+#ifndef SPEW_DEBUG_MSG
+#define SPEW_DEBUG_MSG(fmt, ...)  \
+  do {                            \
+    utility::output_formatted_debug_string( \
+    __WFILE__, __LINE__, fmt, ##__VA_ARGS__); \
+    DISABLE_WARNING_BLOCK_BEGIN(4127) \
+  } while (0); \
+  DISABLE_WARNING_BLOCK_END(4127)
+#endif
+
 #else /* _DEBUG */
 
 #define OUT_DBG_MSG(fmtspec, ...) static_cast<void>(0)
@@ -137,4 +213,13 @@ struct COMObject_Deleter {
 
 #define FUNC_FAILED_WINAPI(fun_name) static_cast<void>(0)
 
-#endif /* !_DEBUG */
+#define ERR_WINAPI(func)  static_cast<void>(0)
+
+#define TRACE_D2DCALL(ret_code_ptr, call_and_args)  \
+  do { \
+    *(ret_code_ptr) = (call_and_args); \
+  } while (0)
+
+#define SPEW_DEBUG_MSG(fmt, ...)  static_cast<void>(0)
+
+#endif

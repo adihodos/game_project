@@ -29,7 +29,7 @@ acceptable.  Do NOT use for cryptographic purposes.
 */
 
 #pragma warning(push)
-#pragma warning(disable : 4101, 4127)
+#pragma warning(disable : 4101 4127)
 uint32_t hashlittle( const void *key, size_t length, uint32_t initval)
 {
   uint32_t a,b,c;                                          /* internal state */

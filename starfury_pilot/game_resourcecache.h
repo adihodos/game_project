@@ -11,81 +11,82 @@
 #include "lazy_unique_instance.h"
 #include "scoped_pointer.h"
 
-namespace game_ui {
-struct GameFontData;
-}
+namespace gfx {
 
-struct D2D1ColorFComparator : public std::binary_function<D2D1_COLOR_F, D2D1_COLOR_F, bool> {
+class vector2;
+
+} // namespace gfx
+
+namespace game_core {
+
+struct d2d1_colorf_cmp : public std::binary_function<D2D1_COLOR_F, D2D1_COLOR_F, bool> {
   bool operator()(const D2D1_COLOR_F& lhs, const D2D1_COLOR_F& rhs) const {
     return lhs.a == rhs.a && lhs.b == rhs.b && lhs.g == lhs.g && lhs.r == rhs.r;
   }
 };
 
-struct D2D1ColorFHasher : public std::unary_function<D2D1_COLOR_F, size_t> {
+struct d2d1_colorf_hash : public std::unary_function<D2D1_COLOR_F, size_t> {
   size_t operator()(const D2D1_COLOR_F& val) const {
     return hashlittle(&val, sizeof(val), 0);
   }
 };
 
-struct GameFontDataHasher : public std::unary_function<game_ui::GameFontData, size_t> {
-  size_t operator()(const game_ui::GameFontData& fdata) const {
-    return fdata.Hash();
+struct game_font_hash : public std::unary_function<game_font, size_t> {
+  size_t operator()(const game_font& fdata) const {
+    return fdata.hash();
   }
 };
 
-class GameResourceCache : private base::LazyUniqueInstanceLifeTraits<GameResourceCache> {
+class resource_cache : private base::LazyUniqueInstanceLifeTraits<resource_cache> {
 public :
-  bool Initialize(ID2D1HwndRenderTarget* rtarget);
+  bool initialize(ID2D1HwndRenderTarget* rtarget);
 
-  ID2D1Bitmap* GetBitmapHandle(const wchar_t* bmpfile);
-
-  ID2D1SolidColorBrush* GetSolidColorBrushHandle(const D2D1::ColorF& color);
-
-  ID2D1SolidColorBrush* GetSolidColorBrushHandle(const D2D1_COLOR_F& color) {
-    return GetSolidColorBrushHandle(D2D1::ColorF(color.r, color.g, color.b, color.a));
+  void set_render_target(ID2D1RenderTarget* new_target) {
+    rtarget_ = new_target;
   }
 
-  ID2D1BitmapBrush* GetBitmapBrushHandle(const wchar_t* bmpfile);
+  ID2D1Bitmap* get_bitmap(const wchar_t* bmpfile);
 
-  IDWriteTextFormat* GetFontHandle(const game_ui::GameFontData& fdata);
+  ID2D1SolidColorBrush* get_solid_color_brush(const D2D1::ColorF& color);
 
-  void DiscardAllCachedResources();
+  ID2D1BitmapBrush* get_bitmap_brush(const wchar_t* bmpfile);
+
+  IDWriteTextFormat* get_font(const game_font& fdata);
+
+  void discard_cached_resourcess();
 
   bool get_texture_size(
     const wchar_t* resource_filename,
-    gfx::vector2D* vec_size
+    gfx::vector2* vec_size
     );
 
 private :
-  GameResourceCache();
+  resource_cache();
 
-  ~GameResourceCache();
+  ~resource_cache();
 
-  friend class base::LazyUniqueInstanceLifeTraits<GameResourceCache>;
+  friend class base::LazyUniqueInstanceLifeTraits<resource_cache>;
 
-  typedef std::unordered_map<std::wstring, ID2D1Bitmap*>      GRC_BitmapCache;
-  typedef std::unordered_map<std::wstring, ID2D1BitmapBrush*> GRC_BBrushCache;
+  typedef std::unordered_map<std::wstring, ID2D1Bitmap*>      bitmap_cache_t;
+  typedef std::unordered_map<std::wstring, ID2D1BitmapBrush*> bitmap_brush_cache_t;
   typedef std::unordered_map<D2D1_COLOR_F, 
-                             ID2D1SolidColorBrush*, D2D1ColorFHasher, 
-                             D2D1ColorFComparator>            GRC_SCBrushCache;
+                             ID2D1SolidColorBrush*, d2d1_colorf_hash, 
+                             d2d1_colorf_cmp>            solidcolor_brush_cache_t;
   typedef std::unordered_map<
-    game_ui::GameFontData, std::shared_ptr<IDWriteTextFormat>, GameFontDataHasher>
-                                                              GRC_FontCache;
+    game_core::game_font, std::shared_ptr<IDWriteTextFormat>, game_font_hash>
+                                                              font_cache_t;
 
-  ID2D1HwndRenderTarget*                                    rtarget_;
+  ID2D1RenderTarget*                                        rtarget_;
   scoped_pointer<IWICImagingFactory, D2DInterface>          imgfactory_;
   scoped_pointer<IDWriteFactory, D2DInterface>              writefactory_;
-  GRC_BitmapCache                                           bitmap_cache_;
-  GRC_SCBrushCache                                          solidcolorbrush_cache_;
-  GRC_BBrushCache                                           bitmapbrush_cache_;
-  GRC_FontCache                                             font_cache_;
+  bitmap_cache_t                                            bitmap_cache_;
+  solidcolor_brush_cache_t                                  solidcolorbrush_cache_;
+  bitmap_brush_cache_t                                      bitmapbrush_cache_;
+  font_cache_t                                              font_cache_;
 
-  NO_CPY_CONSTRUCTORS(GameResourceCache);
+  NO_CPY_CONSTRUCTORS(resource_cache);
 };
 
-typedef base::LazyUniqueInstance<GameResourceCache> Game_ResourceCache;
+typedef base::LazyUniqueInstance<game_core::resource_cache> resource_cache_handle;
 
-namespace game_logic {
-typedef scoped_pointer<ID2D1SolidColorBrush, D2DInterface>  RS_SolidColorBrush;
-typedef scoped_pointer<ID2D1BitmapBrush, D2DInterface>      RS_BitmapBrush;
-}
+} // namespace game_core

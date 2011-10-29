@@ -34,7 +34,7 @@ void game_entity::SA32_PlasmaBolt::Draw(
   Direct2DRenderer* r_render
   )
 {
-  D2D1_ELLIPSE bolt_geometry(D2D1::Ellipse(pos_, size_.x_ / 2, size_.y_ / 2));
+//  D2D1_ELLIPSE bolt_geometry(D2D1::Ellipse(pos_, size_.x_ / 2, size_.y_ / 2));
 
   //ID2D1BitmapBrush* bolt_texture(base::LazyUniqueInstance<GameResourceCache>::Get()->GetBitmapBrushHandle(SA32_PlasmaBolt::K_ResourceFileName);
   //assert(bolt_texture);

@@ -5,13 +5,13 @@
 #include "scoped_pointer.h"
 #include "sys_event.h"
 
-game_logic::Sys_EventQueue::Sys_EventQueue(
+game_core::Sys_EventQueue::Sys_EventQueue(
   IKeyboard_EventReceiver* trap_kbd /* = nullptr */, 
   IMouse_EventReceiver* trap_mouse /* = nullptr */)
   : pending_events_(), trap_keybd_to_(trap_kbd), trap_mouse_to_(trap_mouse) {}
 
 void
-game_logic::Sys_EventQueue::Get_NextEvent() {
+game_core::Sys_EventQueue::Get_NextEvent() {
   //
   // Queue has pending events.
   if (!pending_events_.empty())
@@ -40,7 +40,7 @@ game_logic::Sys_EventQueue::Get_NextEvent() {
 }
 
 bool
-game_logic::Sys_EventQueue::Dispatch_Event() {
+game_core::Sys_EventQueue::Dispatch_Event() {
   if (pending_events_.empty())
     return true;
 
@@ -77,7 +77,7 @@ game_logic::Sys_EventQueue::Dispatch_Event() {
 }
 
 void
-game_logic::Sys_EventQueue::Post_MouseEvent(
+game_core::Sys_EventQueue::Post_MouseEvent(
   const MouseEvent_Args& me_args
   )
 {
@@ -90,7 +90,7 @@ game_logic::Sys_EventQueue::Post_MouseEvent(
 }
 
 void
-game_logic::Sys_EventQueue::Post_KeyEvent(
+game_core::Sys_EventQueue::Post_KeyEvent(
   const KeyEvent_Args& kb_args
   )
 {
@@ -103,7 +103,7 @@ game_logic::Sys_EventQueue::Post_KeyEvent(
 }
 
 void
-game_logic::Sys_EventQueue::Post_QuitEvent() {
+game_core::Sys_EventQueue::Post_QuitEvent() {
   Sys_Event se_quit;
   se_quit.type_ = kSysEventType_QuitEvent;
   pending_events_.push_front(se_quit);

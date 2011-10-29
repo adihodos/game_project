@@ -1,41 +1,48 @@
-#ifndef ENGINE_H__
-#define ENGINE_H__
+#pragma once
 
 #include "basetypes.h"
 #include "lazy_unique_instance.h"
 #include "scoped_pointer.h"
 
-namespace game_logic {
+namespace gfx {
+  class vector2;
+  class matrix3X3;
+  class rectangle;
+}
 
-class IMouse_EventReceiver;
-class IKeyboard_EventReceiver;
+namespace game_core {
 
-class Game_Engine : public base::LazyUniqueInstanceLifeTraits<Game_Engine> {
+class game_engine : public base::LazyUniqueInstanceLifeTraits<game_engine> {
 public :
   bool initialize(void);
 
-  void app_main();
+  void run();
 
   void quit();
 
-  void set_trap_mouseevents_dest(IMouse_EventReceiver*);
+  ID2D1HwndRenderTarget* get_rendertarget() const;
 
-  void set_trap_keyboardevents_dest(IKeyboard_EventReceiver*);
+  ID2D1Factory* get_factory() const;
+
+  const gfx::matrix3X3& get_world_transform_matrix() const;
+
+  const gfx::vector2& get_world_geometry() const;
+
+  const gfx::rectangle get_world_clip_rectangle() const;
+
 private :
-  Game_Engine();
+  game_engine();
 
-  ~Game_Engine();
+  ~game_engine();
 
-  friend class base::LazyUniqueInstanceLifeTraits<Game_Engine>;
+  friend class base::LazyUniqueInstanceLifeTraits<game_engine>;
 
-  struct Implementation_Details;
-  scoped_pointer<Implementation_Details>  e_impl_;
+  struct implementation_details;
+  scoped_pointer<implementation_details>  e_impl_;
 
-  NO_CPY_CONSTRUCTORS(Game_Engine);
+  NO_CPY_CONSTRUCTORS(game_engine);
 };
 
-typedef base::LazyUniqueInstance<Game_Engine> GameEngine_Handle;
+typedef base::LazyUniqueInstance<game_core::game_engine> engine_handle;
 
-} // namespace game_logic
-
-#endif // !ENGINE_H__
+} // namespace game_core
